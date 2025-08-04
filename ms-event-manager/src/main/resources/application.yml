@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-event-manager
+  data:
+    mongodb:
+      uri: mongodb+srv://${USERNAME}:${DB_PASSWORD}@clusterdesafio3.mpnjzen.mongodb.net/db-event?retryWrites=true&w=majority&appName=ClusterDesafio3

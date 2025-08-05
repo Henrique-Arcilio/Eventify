@@ -2,6 +2,7 @@ package com.arcilio.henrique.ms_event_manager.application;
 
 import com.arcilio.henrique.ms_event_manager.application.representation.CreateEventDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
+import com.arcilio.henrique.ms_event_manager.infra.clients.ViaCepClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

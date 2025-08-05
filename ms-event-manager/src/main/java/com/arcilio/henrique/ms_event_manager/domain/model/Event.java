@@ -1,6 +1,5 @@
 package com.arcilio.henrique.ms_event_manager.domain.model;
 
-import com.arcilio.henrique.ms_event_manager.domain.enums.Uf;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,7 +20,7 @@ public class Event {
     private String logradouro;
     private String bairro;
     private String cidade;
-    private Uf uf;
+    private String uf;
 
     public Event(String eventName, LocalDateTime dateTime, String cep) {
         this.eventName = eventName;

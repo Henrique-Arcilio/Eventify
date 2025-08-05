@@ -4,3 +4,7 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://${USERNAME}:${DB_PASSWORD}@clusterdesafio3.mpnjzen.mongodb.net/db-event?retryWrites=true&w=majority&appName=ClusterDesafio3
+feign:
+  data-resource:
+    name: via-cep
+    url: https://viacep.com.br/ws

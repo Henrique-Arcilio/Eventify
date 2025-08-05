@@ -23,7 +23,33 @@ public class EventExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorMessage> invalidDate(HttpServletRequest request){
+
+        log.error("Api error: ");
+
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorMessage(request,
                 HttpStatus.UNPROCESSABLE_ENTITY, "Invalid date format. Please use: yyyy-MM-dd'T'HH:mm:ss"));
+    }
+
+    @ExceptionHandler(CepNotFoundException.class)
+    public ResponseEntity<ErrorMessage> cepNotFound
+
+            (CepNotFoundException exception, HttpServletRequest request){
+
+        log.error("Api error: ", exception);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorMessage(request,HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler(ClientComunicationError.class)
+    public ResponseEntity<ErrorMessage> clientComunicationError
+            (CepNotFoundException exception, HttpServletRequest request){
+
+        log.error("Api error: ", exception);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(new ErrorMessage(request,HttpStatus.BAD_GATEWAY, exception.getMessage()));
     }
 }

@@ -1,9 +1,12 @@
 package com.arcilio.henrique.ms_event_manager.application;
 
+import com.arcilio.henrique.ms_event_manager.application.exception.ClientComunicationError;
+import com.arcilio.henrique.ms_event_manager.application.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import com.arcilio.henrique.ms_event_manager.infra.clients.ViaCepClient;
 import com.arcilio.henrique.ms_event_manager.infra.repository.EventRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +18,21 @@ public class EventService {
     private final ViaCepClient viaCepClient;
 
     public Event createEvent(Event event){
-        ViaCepAdressDto adressInformation = viaCepClient.getAdressInformation(event.getCep());
+        try {
+            ViaCepAdressDto addressInformation = viaCepClient.getAdressInformation(event.getCep());
+            if(addressInformation.isErro()){
+                throw new CepNotFoundException("The CEP provided doesn't exist");
+            }
 
-        event.setBairro(adressInformation.getBairro());
-        event.setCidade(adressInformation.getLocalidade());
-        event.setLogradouro(adressInformation.getLogradouro());
-        event.setUf(adressInformation.getUf());
-        return eventRepository.save(event);
+            event.setBairro(addressInformation.getBairro());
+            event.setCidade(addressInformation.getLocalidade());
+            event.setLogradouro(addressInformation.getLogradouro());
+            event.setUf(addressInformation.getUf());
+
+            return eventRepository.save(event);
+
+        }catch (FeignException.FeignClientException e){
+            throw new ClientComunicationError("Unable to communicate with ViaCep client. Try again later");
+        }
     }
 }

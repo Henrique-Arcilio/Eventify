@@ -9,6 +9,8 @@ import com.arcilio.henrique.ms_event_manager.infra.clients.viacep.ViaCepClient;
 import com.arcilio.henrique.ms_event_manager.infra.repository.EventRepository;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -43,4 +45,9 @@ public class EventService {
         Optional<Event> event = eventRepository.findById(id);
         return event.orElseThrow(() -> new ResourceNotFoundException("No event found with such id"));
     }
+
+    public Page<Event> findAll(Pageable pageable){
+        return eventRepository.findAll(pageable);
+    }
+
 }

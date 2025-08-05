@@ -3,6 +3,7 @@ package com.arcilio.henrique.ms_event_manager.application;
 import com.arcilio.henrique.ms_event_manager.application.representation.CreateEventDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import com.arcilio.henrique.ms_event_manager.infra.clients.ViaCepClient;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class EventResource {
     private final EventService eventService;
 
     @PostMapping("/create-event")
-    public ResponseEntity<Event> create(@RequestBody CreateEventDto dto){
+    public ResponseEntity<Event> create(@Valid @RequestBody CreateEventDto dto){
         Event event = eventService.createEvent(dto.fromDto());
         return ResponseEntity.ok(event);
     }

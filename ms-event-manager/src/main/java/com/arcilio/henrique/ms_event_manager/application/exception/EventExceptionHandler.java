@@ -1,5 +1,7 @@
 package com.arcilio.henrique.ms_event_manager.application.exception;
 
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

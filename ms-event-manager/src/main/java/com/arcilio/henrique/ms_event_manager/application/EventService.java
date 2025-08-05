@@ -1,10 +1,10 @@
 package com.arcilio.henrique.ms_event_manager.application;
 
-import com.arcilio.henrique.ms_event_manager.application.exception.ClientComunicationError;
-import com.arcilio.henrique.ms_event_manager.application.exception.CepNotFoundException;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
-import com.arcilio.henrique.ms_event_manager.infra.clients.ViaCepClient;
+import com.arcilio.henrique.ms_event_manager.infra.clients.viacep.ViaCepClient;
 import com.arcilio.henrique.ms_event_manager.infra.repository.EventRepository;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;

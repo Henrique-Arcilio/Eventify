@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_event_manager.infra.clients;
+package com.arcilio.henrique.ms_event_manager.infra.clients.viacep;
 
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
 import org.springframework.cloud.openfeign.FeignClient;

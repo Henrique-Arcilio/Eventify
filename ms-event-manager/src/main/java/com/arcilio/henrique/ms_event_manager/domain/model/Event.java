@@ -16,22 +16,19 @@ public class Event {
     @Id
     private String id;
     private String eventName;
-    private LocalDateTime localDateTime;
+    private LocalDateTime dateTime;
     private String cep;
     private String logradouro;
     private String bairro;
     private String cidade;
     private Uf uf;
 
-    public Event(String eventName, LocalDateTime localDateTime, String cep, String logradouro, String bairro, String cidade, Uf uf) {
+    public Event(String eventName, LocalDateTime dateTime, String cep) {
         this.eventName = eventName;
-        this.localDateTime = localDateTime;
+        this.dateTime = dateTime;
         this.cep = cep;
-        this.logradouro = logradouro;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.uf = uf;
     }
+
 
     @Override
     public boolean equals(Object o) {

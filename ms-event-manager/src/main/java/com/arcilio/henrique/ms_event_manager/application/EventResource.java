@@ -1,0 +1,25 @@
+package com.arcilio.henrique.ms_event_manager.application;
+
+import com.arcilio.henrique.ms_event_manager.application.representation.CreateEventDto;
+import com.arcilio.henrique.ms_event_manager.domain.model.Event;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("api/v1/events")
+@RequiredArgsConstructor
+public class EventResource {
+
+    private final EventService eventService;
+
+    @PostMapping("/create-event")
+    public ResponseEntity<Event> create(@RequestBody CreateEventDto dto){
+        Event event = eventService.createEvent(dto.fromDto());
+        return ResponseEntity.ok(event);
+    }
+
+}

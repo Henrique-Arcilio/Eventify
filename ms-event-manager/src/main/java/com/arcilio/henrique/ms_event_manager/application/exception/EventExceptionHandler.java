@@ -54,4 +54,15 @@ public class EventExceptionHandler {
                 .status(HttpStatus.BAD_GATEWAY)
                 .body(new ErrorMessage(request,HttpStatus.BAD_GATEWAY, exception.getMessage()));
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorMessage> clientComunicationError
+            (ResourceNotFoundException exception, HttpServletRequest request){
+
+        log.error("Api error: ", exception);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorMessage(request,HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
 }

@@ -37,12 +37,14 @@ public class EventResource {
 
     @GetMapping("/get-all-events")
     public ResponseEntity<PagableDto> getAll(Pageable pageable){
+        log.info("EventResource getAll method accessed");
         Page<Event> events = eventService.findAll(pageable);
         return ResponseEntity.ok().body(PageableMapper.toDto(events));
     }
 
     @GetMapping("/get-all-events/sorted")
     public ResponseEntity<PagableDto> getAllSorted(Pageable pageable){
+        log.info("EventResource getAllSorted method accessed");
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
         Sort sort = Sort.by("eventName").ascending();

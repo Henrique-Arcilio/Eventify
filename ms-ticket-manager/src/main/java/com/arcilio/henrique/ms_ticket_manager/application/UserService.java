@@ -1,0 +1,23 @@
+package com.arcilio.henrique.ms_ticket_manager.application;
+
+import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
+import com.arcilio.henrique.ms_ticket_manager.infra.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService {
+
+    final UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new UsernameNotFoundException("Username not found");
+        }
+        return user;
+    }
+}

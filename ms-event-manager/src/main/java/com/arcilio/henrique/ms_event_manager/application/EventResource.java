@@ -2,6 +2,7 @@ package com.arcilio.henrique.ms_event_manager.application;
 
 import com.arcilio.henrique.ms_event_manager.application.representation.CreateEventDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.PagableDto;
+import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.mapper.PageableMapper;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import jakarta.validation.Valid;
@@ -52,4 +53,9 @@ public class EventResource {
         return this.getAll(pageable);
     }
 
+    @PutMapping("/update-event/{id}")
+    public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateEventDto updateDto){
+        eventService.update(id,updateDto);
+        return ResponseEntity.noContent().build();
+    }
 }

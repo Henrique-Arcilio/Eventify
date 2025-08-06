@@ -1,6 +1,7 @@
 package com.arcilio.henrique.ms_event_manager.application;
 
 import com.arcilio.henrique.ms_event_manager.application.exception.ResourceNotFoundException;
+import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
@@ -24,17 +25,7 @@ public class EventService {
 
     public Event createEvent(Event event){
         try {
-            ViaCepAdressDto addressInformation = viaCepClient.getAdressInformation(event.getCep());
-            if(addressInformation.isErro()){
-                throw new CepNotFoundException("The CEP provided doesn't exist");
-            }
-
-            event.setBairro(addressInformation.getBairro());
-            event.setCidade(addressInformation.getLocalidade());
-            event.setLogradouro(addressInformation.getLogradouro());
-            event.setUf(addressInformation.getUf());
-
-            return eventRepository.save(event);
+            return eventRepository.save(  insertViaCepValues(event));
 
         }catch (FeignException.FeignClientException e){
             throw new ClientComunicationError("Unable to communicate with ViaCep client. Try again later");
@@ -49,5 +40,41 @@ public class EventService {
     public Page<Event> findAll(Pageable pageable){
         return eventRepository.findAll(pageable);
     }
+
+    public void update(String id, UpdateEventDto updateDto){
+        Optional<Event> eventOp = eventRepository.findById(id);
+        Event event = eventOp
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("There is no event with such id"));
+        insertUpdateValues(updateDto, event);
+        eventRepository.save(event);
+    }
+
+
+    private Event insertUpdateValues(UpdateEventDto updateDto, Event event){
+
+        if(updateDto.getEventName() != null && !updateDto.getEventName().isBlank()){
+            event.setEventName(updateDto.getEventName().trim());
+        }
+        if(updateDto.getDateTime() != null){
+            event.setDateTime(updateDto.getDateTime());
+        }
+        if(updateDto.getCep() != null && !updateDto.getCep().equals(event.getCep())){
+           event.setCep(updateDto.getCep());
+           insertViaCepValues(event);
+        }
+        return event;
+    }
+    private Event insertViaCepValues(Event event) {
+        ViaCepAdressDto addressInformation = viaCepClient.getAdressInformation(event.getCep());
+        if(addressInformation.isErro()){
+            throw new CepNotFoundException("The CEP provided doesn't exist");
+        }
+        event.setBairro(addressInformation.getBairro());
+        event.setCidade(addressInformation.getLocalidade());
+        event.setLogradouro(addressInformation.getLogradouro());
+        event.setUf(addressInformation.getUf());
+        return event;
+    };
 
 }

@@ -41,21 +41,11 @@ public class SecurityConfig {
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("api/v1/**").authenticated())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session
-                        -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
-                        authorizeHttpRequests ->
-                                authorizeHttpRequests.requestMatchers(
-
-                                        "/auth/signin",
-                                        "/auth/refresh-token/**",
-                                        "/auth/create-user"
-                                        )
-                                        .permitAll()
-                                        .requestMatchers("/api/**").authenticated()
-                                        .requestMatchers("/users").denyAll()
-                )
                 .build();
     }
 }

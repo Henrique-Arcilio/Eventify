@@ -24,10 +24,10 @@ import java.util.List;
 
 @Service
 public class JwtTokenProvider {
-    @Value("${security.jwt.token.secret-key:secrect}")
+    @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
-    @Value("${spring.security.jwt.token.expire-length:3600000}")
-    private long expirationTimeMilis = 36000;
+    @Value("${security.jwt.token.expire-length:3600000}")
+    private long expirationTimeMilis = 3600000;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -86,10 +86,12 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
-        if(StringUtils.isEmpty(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if(StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
+        }else{
+            return null;
         }
-        throw new InvalidJwtAuthenticationException("Invalid JWT Token");
+
     }
 
     public boolean validateToken(String token){

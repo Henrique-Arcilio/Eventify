@@ -7,5 +7,5 @@ spring:
   security:
     jwt:
       token:
-        secret-key: segredo
+        secret-key: secret
         expire-length: 3600000

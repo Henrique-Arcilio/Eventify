@@ -9,7 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class TokenDto {
     private String username;
-    private String authenticated;
+    private boolean authenticated;
     private Date created;
     private Date expiration;
     private String acessToken;

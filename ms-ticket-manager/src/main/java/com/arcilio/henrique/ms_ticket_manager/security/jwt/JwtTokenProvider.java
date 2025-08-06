@@ -42,7 +42,15 @@ public class JwtTokenProvider {
     }
 
     private String getAcessToken(String username, List<String> roles, Date now, Date expiration) {
-      return null;
+        String issueUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toString();
+
+        return JWT.create()
+                .withClaim("roles", roles)
+                .withIssuedAt(now)
+                .withExpiresAt(expiration)
+                .withSubject(username)
+                .withIssuer(issueUrl)
+                .sign(algorithm);
     }
     private String getRefreshToken(String username, List<String> roles, Date now) {
         return null;

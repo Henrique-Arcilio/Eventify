@@ -84,5 +84,20 @@ public class JwtTokenProvider {
         return decodedJWT;
     }
 
+    public String resolveToken(HttpServletRequest request){
+        String bearerToken = request.getHeader("Authorization");
+        if(StringUtils.isEmpty(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring("Bearer ".length());
+        }
+        throw new InvalidJwtAuthenticationException("Invalid JWT Token");
+    }
 
+    public boolean validateToken(String token){
+        DecodedJWT decodedJWT = decodedToken(token);
+        try {
+            return !decodedJWT.getExpiresAt().before(new Date());
+        }catch (Exception e){
+            throw new InvalidJwtAuthenticationException("Expired or invalid token");
+        }
+    }
 }

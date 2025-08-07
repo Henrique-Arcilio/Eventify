@@ -4,8 +4,8 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://${USERNAME}:${DB_PASSWORD}@clusterdesafio3.mpnjzen.mongodb.net/db-ticket?retryWrites=true&w=majority&appName=ClusterDesafio3
-  security:
-    jwt:
-      token:
-        secret-key: secret
-        expire-length: 3600000
+security:
+  jwt:
+    token:
+      secret-key: "abcdefghijklmnopqrstuvwxyz123456"
+      expire-length: 3600000

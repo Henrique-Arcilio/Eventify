@@ -24,10 +24,10 @@ import java.util.List;
 
 @Service
 public class JwtTokenProvider {
-    @Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private long expirationTimeMilis = 3600000;
+    @Value("${security.jwt.token.secret-key}")
+    private String secretKey;
+    @Value("${security.jwt.token.expire-length}")
+    private long expirationTimeMilis;
 
     @Autowired
     private UserDetailsService userDetailsService;

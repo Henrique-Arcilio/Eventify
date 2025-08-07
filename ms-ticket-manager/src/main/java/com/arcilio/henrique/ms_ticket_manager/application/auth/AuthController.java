@@ -1,7 +1,9 @@
 package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.SignInCredentialsDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +19,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public ResponseEntity<TokenDto> signIn(@RequestBody AccountCredentialsDto credentials){
+    public ResponseEntity<TokenDto> signIn(@Valid @RequestBody SignInCredentialsDto credentials){
         return authService.signIn(credentials);
     }
     @PostMapping("/create-user")
-    public ResponseEntity<Void> createUser(@RequestBody AccountCredentialsDto credentials){
+    public ResponseEntity<Void> createUser(@Valid @RequestBody AccountCredentialsDto credentials){
         authService.createUser(credentials);
         return ResponseEntity.noContent().build();
     }

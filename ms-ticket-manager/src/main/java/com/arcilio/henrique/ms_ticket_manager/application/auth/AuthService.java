@@ -2,6 +2,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.security.UsernameAlreadyExistsException;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.SignInCredentialsDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.UserRepository;
@@ -25,15 +26,16 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
-    public ResponseEntity<TokenDto> signIn(    AccountCredentialsDto credentialsDto){
+
+    public ResponseEntity<TokenDto> signIn(    SignInCredentialsDto signInCredentials){
         authenticationManager.authenticate
              (             new UsernamePasswordAuthenticationToken(
-                     credentialsDto.getUsername(), credentialsDto.getPassword()));
-        User user = userRepository.findByUsername(credentialsDto.getUsername());
+                     signInCredentials.getUsername(), signInCredentials.getPassword()));
+        User user = userRepository.findByUsername(signInCredentials.getUsername());
         if(user == null){
             throw new UsernameNotFoundException("Username not found");
         }
-        TokenDto tokenDto = tokenProvider.createAcessToken(credentialsDto.getUsername(), List.of("CLIENTE"));
+        TokenDto tokenDto = tokenProvider.createAcessToken(signInCredentials.getUsername(), List.of("CLIENTE"));
         return ResponseEntity.ok(tokenDto);
     }
 
@@ -48,6 +50,8 @@ public class AuthService {
         User newUser = new User();
         newUser.setUsername(credentials.getUsername());
         newUser.setPassword(encriptPassword(credentials.getPassword()));
+        newUser.setFullname(credentials.getFullname());
+        newUser.setCpf(credentials.getCpf());
         newUser.setAccountNonExpired(true);
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);

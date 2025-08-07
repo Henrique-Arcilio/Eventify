@@ -35,7 +35,7 @@ public class AuthService {
         if(user == null){
             throw new UsernameNotFoundException("Username not found");
         }
-        TokenDto tokenDto = tokenProvider.createAcessToken(signInCredentials.getUsername(), List.of("CLIENTE"));
+        TokenDto tokenDto = tokenProvider.createAcessToken(signInCredentials.getUsername(), List.of(user.getRole()));
         return ResponseEntity.ok(tokenDto);
     }
 
@@ -56,6 +56,7 @@ public class AuthService {
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);
         newUser.setEnabled(true);
+        newUser.setRole("ROLE_CUSTOMER");
         userRepository.save(newUser);
     }
 

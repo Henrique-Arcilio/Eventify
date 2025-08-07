@@ -39,10 +39,11 @@ public class User  implements UserDetails, Serializable {
 
     private Boolean enabled;
 
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(() -> role);
     }
 
     @Override

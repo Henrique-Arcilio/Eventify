@@ -9,3 +9,7 @@ security:
     token:
       secret-key: "abcdefghijklmnopqrstuvwxyz123456"
       expire-length: 3600000
+feign:
+  data-resource:
+    name: ms-event-manager
+    url: http://localhost:8081/api/v1/events

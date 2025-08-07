@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
+import com.arcilio.henrique.ms_ticket_manager.application.exception.security.UsernameAlreadyExistsException;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
@@ -37,14 +38,21 @@ public class AuthService {
     }
 
     public void createUser(AccountCredentialsDto credentials) {
-        User user = new User();
-        user.setUsername(credentials.getUsername());
-        user.setPassword(encriptPassword(credentials.getPassword()));
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        user.setEnabled(true);
-        userRepository.save(user);
+        User user = userRepository.findByUsername(credentials.getUsername());
+        if(user != null){
+            throw new UsernameAlreadyExistsException(
+                            "The username " +
+                            credentials.getUsername() +
+                            " is already in use");
+        }
+        User newUser = new User();
+        newUser.setUsername(credentials.getUsername());
+        newUser.setPassword(encriptPassword(credentials.getPassword()));
+        newUser.setAccountNonExpired(true);
+        newUser.setAccountNonLocked(true);
+        newUser.setCredentialsNonExpired(true);
+        newUser.setEnabled(true);
+        userRepository.save(newUser);
     }
 
     private String encriptPassword(String password){

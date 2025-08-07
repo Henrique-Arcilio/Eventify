@@ -15,4 +15,11 @@ public class TicketExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, exception.getMessage() ));
     }
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ErrorMessage> usernameAlreadyExists
+            (UsernameAlreadyExistsException exception, HttpServletRequest request){
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, exception.getMessage() ));
+    }
 }

@@ -1,11 +1,9 @@
-package com.arcilio.henrique.ms_ticket_manager;
+package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
-import com.arcilio.henrique.ms_ticket_manager.application.AuthService;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

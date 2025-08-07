@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_ticket_manager.application;
+package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;

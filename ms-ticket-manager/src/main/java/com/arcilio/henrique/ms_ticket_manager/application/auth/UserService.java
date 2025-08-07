@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_ticket_manager.application;
+package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.UserRepository;

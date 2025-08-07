@@ -27,6 +27,10 @@ public class User  implements UserDetails, Serializable {
 
     private String password;
 
+    private String fullname;
+
+    private String cpf;
+
     private Boolean accountNonExpired;
 
     private Boolean accountNonLocked;

@@ -41,6 +41,8 @@ public class User  implements UserDetails, Serializable {
 
     private String role;
 
+    private List<String> idTickets;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(() -> role);

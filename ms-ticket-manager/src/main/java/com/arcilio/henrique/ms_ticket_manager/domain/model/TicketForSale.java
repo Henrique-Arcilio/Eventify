@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class TicketForSale {
     @Id
     private String id;
-    private String ticketId;
     private EventDto event;
     private Double BRLTotalAmount;
     private Double USDTotalAmount;

@@ -8,3 +8,5 @@ feign:
   data-resource:
     name: via-cep
     url: https://viacep.com.br/ws
+server:
+  port: 8081

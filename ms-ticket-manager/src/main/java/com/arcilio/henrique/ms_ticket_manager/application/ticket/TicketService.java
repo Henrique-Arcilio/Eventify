@@ -1,9 +1,10 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.CreateTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.EventManagerClient;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.TicketForSaleRepository;
@@ -11,6 +12,8 @@ import com.arcilio.henrique.ms_ticket_manager.infra.repository.UserTicketReposit
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +36,13 @@ public class TicketService {
             }
             throw new ClientComunicationError("Unable to communicate with ViaCep client. Try again later");
         }
+    }
+
+    public List<TicketForSale> findForSaleByEvent(String eventId) {
+        return ticketForSaleRepository.findByEventId(eventId);
+    }
+
+    public List<UserTicket> findPurchasedByEvent(String eventId) {
+        return userTicketRepository.findByEventId(eventId);
     }
 }

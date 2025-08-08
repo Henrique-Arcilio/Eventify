@@ -1,8 +1,8 @@
 package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
-import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.SignInCredentialsDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.AccountCredentialsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.SignInCredentialsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.TokenDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

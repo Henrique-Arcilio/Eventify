@@ -3,7 +3,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.representation.ticket
 import lombok.Data;
 
 @Data
-public class CheckPurchasedTicketsDto {
+public class PurchasedTicketsByEventDto {
     private String id;
     private String ticketId;
     private String costumerName;

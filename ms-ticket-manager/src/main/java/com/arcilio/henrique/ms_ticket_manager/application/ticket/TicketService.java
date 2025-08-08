@@ -3,6 +3,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetForSaleTicketByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,4 +47,5 @@ public class TicketService {
     public List<UserTicket> findPurchasedByEvent(String eventId) {
         return userTicketRepository.findByEventId(eventId);
     }
+
 }

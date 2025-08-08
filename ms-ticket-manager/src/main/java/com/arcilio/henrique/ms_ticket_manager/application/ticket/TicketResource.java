@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,5 +56,10 @@ public class TicketResource {
     public ResponseEntity<List<TicketForSale>> getAllForSale(){
         List<TicketForSale> tickets = ticketService.findAllForSale();
         return ResponseEntity.ok(tickets);
+    }
+    @PostMapping("{id}/purchase")
+    public ResponseEntity<UserTicket> purchaseTicket(@PathVariable String id,  @AuthenticationPrincipal UserDetails userDetails){
+        UserTicket newTicket =  ticketService.createUserTicket(id, userDetails);
+        return ResponseEntity.ok(newTicket);
     }
 }

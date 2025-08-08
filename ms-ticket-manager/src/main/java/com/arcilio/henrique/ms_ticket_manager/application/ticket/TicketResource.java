@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class TicketResource {
     public final TicketService ticketService;
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("create-ticket")
     public ResponseEntity<TicketForSale> create(@Valid @RequestBody CreateTicketDto dto){
         TicketForSale ticket = ticketService.createTicketForSale(dto);

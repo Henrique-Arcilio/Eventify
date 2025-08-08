@@ -1,9 +1,11 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.CheckForSaleTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.CheckPurchasedTicketsDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,13 @@ public class TicketResource {
     @GetMapping("tickets-for-sale/{eventId}")
     public ResponseEntity<List<CheckForSaleTicketDto>> checkForSaleByEventId(@PathVariable String eventId){
         List<TicketForSale> tickets = ticketService.findForSaleByEvent(eventId);
-        List<CheckForSaleTicketDto> ticketDtos = TicketMapper.toCheckEventTicket(tickets);
+        List<CheckForSaleTicketDto> ticketDtos = TicketMapper.listOfForSaleDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
     }
-
+    @GetMapping("purchased-tickets/{eventId}")
+    public ResponseEntity<List<CheckPurchasedTicketsDto>> checkPurchasedByEventId(@PathVariable String eventId){
+        List<UserTicket> tickets = ticketService.findPurchasedByEvent(eventId);
+        List<CheckPurchasedTicketsDto> ticketDtos = TicketMapper.listOfPurchasedDto(tickets);
+        return ResponseEntity.ok().body(ticketDtos);
+    }
 }

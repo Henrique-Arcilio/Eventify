@@ -4,6 +4,7 @@ import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.Resou
 import com.arcilio.henrique.ms_ticket_manager.application.representation.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.EventManagerClient;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.TicketForSaleRepository;
@@ -39,5 +40,9 @@ public class TicketService {
 
     public List<TicketForSale> findForSaleByEvent(String eventId) {
         return ticketForSaleRepository.findByEventId(eventId);
+    }
+
+    public List<UserTicket> findPurchasedByEvent(String eventId) {
+        return userTicketRepository.findByEventId(eventId);
     }
 }

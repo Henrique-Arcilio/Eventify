@@ -63,7 +63,7 @@ public class TicketResource {
         return ResponseEntity.ok(newTicket);
     }
 
-    @PutMapping("{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<Void> updateTicket(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto){
         ticketService.updateTicketForSale(id, updateDto);
         return ResponseEntity.noContent().build();

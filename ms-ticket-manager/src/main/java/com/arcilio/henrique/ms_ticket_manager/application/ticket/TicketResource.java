@@ -44,4 +44,10 @@ public class TicketResource {
         GetTicketForSaleByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
+    @GetMapping("user-ticket/{id}")
+    public ResponseEntity<GetUserTicketByIdDto> getUserTicket(@PathVariable String id){
+        UserTicket ticket = ticketService.findUserTicketById(id);
+        GetUserTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
+        return ResponseEntity.ok(ticketDto);
+    }
 }

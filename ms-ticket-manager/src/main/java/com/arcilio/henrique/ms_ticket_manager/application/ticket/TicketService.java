@@ -52,4 +52,9 @@ public class TicketService {
         return ticketForSaleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
     }
+
+    public UserTicket findUserTicketById(String id) throws ResourceNotFoundException{
+        return userTicketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
+    }
 }

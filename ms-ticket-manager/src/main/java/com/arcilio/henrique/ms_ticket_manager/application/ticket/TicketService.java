@@ -3,6 +3,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.UpdateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
@@ -84,5 +85,19 @@ public class TicketService {
 
     public List<TicketForSale> findAllForSale() {
         return ticketForSaleRepository.findAll();
+    }
+
+    public void updateTicketForSale(String id, UpdateTicketDto updateDto) {
+        Optional<TicketForSale> ticketOp = ticketForSaleRepository.findById(id);
+        TicketForSale ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No ticket found with given id"));
+        ticketForSaleRepository.save( updateValues(ticket, updateDto));
+    }
+
+    TicketForSale updateValues(TicketForSale ticketForSale, UpdateTicketDto updateDto){
+        if(updateDto.getBrlTotalAmount() != null){
+            ticketForSale.setBRLTotalAmount(updateDto.getBrlTotalAmount());
+            ticketForSale.setUSDTotalAmount(ticketForSale.getBRLTotalAmount() * 5);
+        }
+        return ticketForSale;
     }
 }

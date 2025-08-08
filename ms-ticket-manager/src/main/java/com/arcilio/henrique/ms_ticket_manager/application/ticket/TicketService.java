@@ -37,7 +37,7 @@ public class TicketService {
         }
     }
 
-    public List<TicketForSale> findAByEventId(String eventId) {
-        return  ticketForSaleRepository.findByEventId(eventId);
+    public List<TicketForSale> findForSaleByEvent(String eventId) {
+        return ticketForSaleRepository.findByEventId(eventId);
     }
 }

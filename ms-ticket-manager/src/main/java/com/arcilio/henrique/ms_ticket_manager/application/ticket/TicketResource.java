@@ -1,6 +1,8 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 
+import com.arcilio.henrique.ms_ticket_manager.application.representation.CheckForSaleTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.CreateTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,10 @@ public class TicketResource {
     }
 
     @GetMapping("tickets-for-sale/{eventId}")
-    public ResponseEntity<List<TicketForSale>> checkForSaleByEventId(@PathVariable String eventId){
-        List<TicketForSale> tickets = ticketService.findAByEventId(eventId);
-        return ResponseEntity.ok().body(tickets);
+    public ResponseEntity<List<CheckForSaleTicketDto>> checkForSaleByEventId(@PathVariable String eventId){
+        List<TicketForSale> tickets = ticketService.findForSaleByEvent(eventId);
+        List<CheckForSaleTicketDto> ticketDtos = TicketMapper.toCheckEventTicket(tickets);
+        return ResponseEntity.ok().body(ticketDtos);
     }
 
 }

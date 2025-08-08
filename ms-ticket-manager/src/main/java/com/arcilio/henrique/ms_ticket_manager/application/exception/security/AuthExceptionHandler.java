@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.exception.security;
 
+import com.arcilio.henrique.ms_ticket_manager.application.exception.ErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class TicketExceptionHandler {
+public class AuthExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidArgument(MethodArgumentNotValidException exception,
@@ -33,4 +34,5 @@ public class TicketExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, exception.getMessage() ));
     }
+
 }

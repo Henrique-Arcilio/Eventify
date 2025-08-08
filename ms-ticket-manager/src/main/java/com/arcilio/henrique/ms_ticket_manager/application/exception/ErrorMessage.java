@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_ticket_manager.application.exception.security;
+package com.arcilio.henrique.ms_ticket_manager.application.exception;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

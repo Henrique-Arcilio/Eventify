@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.representation.mapper;
 
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketForSaleByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.TicketForSaleByEventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.PurchasedTicketsByEventDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
@@ -12,8 +13,9 @@ import java.util.List;
 
 public class TicketMapper {
 
+    private static final ModelMapper mapper = new ModelMapper();
+
     public static List<TicketForSaleByEventDto> listOfForSaleDto(List<TicketForSale> tickets) {
-        ModelMapper mapper = new ModelMapper();
         List<TicketForSaleByEventDto> ticketDtos = new ArrayList<>();
         mapper.addMappings(new PropertyMap<TicketForSale, TicketForSaleByEventDto>() {
             @Override
@@ -27,7 +29,6 @@ public class TicketMapper {
         return ticketDtos;
     }
     public static List<PurchasedTicketsByEventDto> listOfPurchasedDto(List<UserTicket> tickets) {
-        ModelMapper mapper = new ModelMapper();
         List<PurchasedTicketsByEventDto> ticketDtos = new ArrayList<>();
         for (UserTicket ticket : tickets){
             ticketDtos.add(mapper.map(ticket, PurchasedTicketsByEventDto.class));

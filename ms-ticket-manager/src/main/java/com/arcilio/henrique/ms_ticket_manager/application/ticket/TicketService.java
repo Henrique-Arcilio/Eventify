@@ -57,4 +57,8 @@ public class TicketService {
         return userTicketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
     }
+
+    public List<TicketForSale> findAllForSale() {
+        return ticketForSaleRepository.findAll();
+    }
 }

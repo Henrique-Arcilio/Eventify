@@ -50,4 +50,9 @@ public class TicketResource {
         GetUserTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
+    @GetMapping
+    public ResponseEntity<List<TicketForSale>> getAllForSale(){
+        List<TicketForSale> tickets = ticketService.findAllForSale();
+        return ResponseEntity.ok(tickets);
+    }
 }

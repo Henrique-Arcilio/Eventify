@@ -3,7 +3,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetForSaleTicketByIdDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketForSaleByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
@@ -48,4 +48,8 @@ public class TicketService {
         return userTicketRepository.findByEventId(eventId);
     }
 
+    public TicketForSale findForSaleById(String id) throws ResourceNotFoundException{
+        return ticketForSaleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No such ticket is for sale with such id"));
+    }
 }

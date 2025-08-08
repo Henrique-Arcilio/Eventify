@@ -1,9 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.TicketForSaleByEventDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetForSaleTicketByIdDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.PurchasedTicketsByEventDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.*;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
@@ -28,13 +25,13 @@ public class TicketResource {
         return ResponseEntity.ok(ticket);
     }
 
-    @GetMapping("tickets-for-sale/{eventId}")
+    @GetMapping("tickets-for-sale/event/{eventId}")
     public ResponseEntity<List<TicketForSaleByEventDto>> checkForSaleByEventId(@PathVariable String eventId){
         List<TicketForSale> tickets = ticketService.findForSaleByEvent(eventId);
         List<TicketForSaleByEventDto> ticketDtos = TicketMapper.listOfForSaleDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
     }
-    @GetMapping("purchased-tickets/{eventId}")
+    @GetMapping("purchased-tickets/event/{eventId}")
     public ResponseEntity<List<PurchasedTicketsByEventDto>> checkPurchasedByEventId(@PathVariable String eventId){
         List<UserTicket> tickets = ticketService.findPurchasedByEvent(eventId);
         List<PurchasedTicketsByEventDto> ticketDtos = TicketMapper.listOfPurchasedDto(tickets);

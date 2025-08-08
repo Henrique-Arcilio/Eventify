@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.representation.mapper;
 
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetPurchasedTicketByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketForSaleByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.TicketForSaleByEventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.PurchasedTicketsByEventDto;
@@ -34,5 +35,12 @@ public class TicketMapper {
             ticketDtos.add(mapper.map(ticket, PurchasedTicketsByEventDto.class));
         }
         return ticketDtos;
+    }
+
+    public static GetTicketForSaleByIdDto ticketForSaleDto(TicketForSale ticketForSale){
+        return mapper.map(ticketForSale, GetTicketForSaleByIdDto.class);
+    }
+    public static GetPurchasedTicketByIdDto ticketForSaleDto(UserTicket userTicket){
+        return mapper.map(userTicket, GetPurchasedTicketByIdDto.class);
     }
 }

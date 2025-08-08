@@ -5,6 +5,7 @@ import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.UpdateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketStatus;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
@@ -35,6 +36,7 @@ public class TicketService {
             ticketForSale.setUSDTotalAmount(dto.getBrlTotalAmount() * 5);
             EventDto eventDto = eventManagerClient.getById(dto.getEventId());
             ticketForSale.setEvent(eventDto);
+            ticketForSale.setStatus(TicketStatus.ACTIVE);
             return ticketForSaleRepository.save(ticketForSale);
         }catch (FeignException e){
             if(e.status() == 404) {
@@ -61,16 +63,17 @@ public class TicketService {
         ticket.setCostumerMail(user.getUsername());
         ticket.setBRLTotalAmount(ticketForSale.getBRLTotalAmount());
         ticket.setUSDTotalAmount(ticketForSale.getUSDTotalAmount());
+        ticket.setStatus(TicketStatus.ACTIVE);
 
         return userTicketRepository.save(ticket);
     }
 
     public List<TicketForSale> findForSaleByEvent(String eventId) {
-        return ticketForSaleRepository.findByEventId(eventId);
+        return ticketForSaleRepository.findByEventIdAndStatus(eventId, TicketStatus.ACTIVE);
     }
 
     public List<UserTicket> findPurchasedByEvent(String eventId) {
-        return userTicketRepository.findByEventId(eventId);
+        return userTicketRepository.findByEventIdAndStatus(eventId, TicketStatus.ACTIVE);
     }
 
     public TicketForSale findForSaleById(String id) throws ResourceNotFoundException{

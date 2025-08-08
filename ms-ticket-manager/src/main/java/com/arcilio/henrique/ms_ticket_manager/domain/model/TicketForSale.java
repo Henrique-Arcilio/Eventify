@@ -1,6 +1,7 @@
 package com.arcilio.henrique.ms_ticket_manager.domain.model;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -14,4 +15,6 @@ public class TicketForSale {
     private EventDto event;
     private Double BRLTotalAmount;
     private Double USDTotalAmount;
+
+    private TicketStatus status;
 }

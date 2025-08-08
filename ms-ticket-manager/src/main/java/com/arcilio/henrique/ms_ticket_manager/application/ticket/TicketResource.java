@@ -62,4 +62,10 @@ public class TicketResource {
         UserTicket newTicket =  ticketService.createUserTicket(id, userDetails);
         return ResponseEntity.ok(newTicket);
     }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<Void> updateTicket(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto){
+        ticketService.updateTicketForSale(id, updateDto);
+        return ResponseEntity.noContent().build();
+    }
 }

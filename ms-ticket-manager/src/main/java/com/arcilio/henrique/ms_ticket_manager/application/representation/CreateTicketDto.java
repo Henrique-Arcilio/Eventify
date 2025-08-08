@@ -10,6 +10,6 @@ public class CreateTicketDto {
     @NotBlank(message = "The event id is required")
     private String eventId;
     @NotNull(message = "Total R$ is required")
-    @PositiveOrZero(message = "R$ need to be a number")
+    @PositiveOrZero(message = "R$ need to be a positive number")
     private Double brlTotalAmount;
 }

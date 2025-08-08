@@ -1,7 +1,7 @@
 package com.arcilio.henrique.ms_ticket_manager.security.jwt;
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.security.InvalidJwtAuthenticationException;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.TokenDto;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_ticket_manager.application.representation;
+package com.arcilio.henrique.ms_ticket_manager.application.representation.tickets;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

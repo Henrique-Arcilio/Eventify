@@ -1,9 +1,9 @@
 package com.arcilio.henrique.ms_ticket_manager.application.auth;
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.security.UsernameAlreadyExistsException;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.AccountCredentialsDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.SignInCredentialsDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.TokenDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.AccountCredentialsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.SignInCredentialsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.account.TokenDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.UserRepository;
 import com.arcilio.henrique.ms_ticket_manager.security.jwt.JwtTokenProvider;

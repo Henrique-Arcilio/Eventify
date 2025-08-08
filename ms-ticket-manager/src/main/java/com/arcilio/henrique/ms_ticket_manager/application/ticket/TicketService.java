@@ -1,7 +1,7 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.CreateTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;

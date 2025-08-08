@@ -1,8 +1,8 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket;
 
-import com.arcilio.henrique.ms_ticket_manager.application.representation.CheckForSaleTicketDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.CheckPurchasedTicketsDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.CreateTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CheckForSaleTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CheckPurchasedTicketsDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;

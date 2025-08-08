@@ -12,6 +12,8 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -33,5 +35,9 @@ public class TicketService {
             }
             throw new ClientComunicationError("Unable to communicate with ViaCep client. Try again later");
         }
+    }
+
+    public List<TicketForSale> findAByEventId(String eventId) {
+        return  ticketForSaleRepository.findByEventId(eventId);
     }
 }

@@ -50,6 +50,6 @@ public class TicketService {
 
     public TicketForSale findForSaleById(String id) throws ResourceNotFoundException{
         return ticketForSaleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No such ticket is for sale with such id"));
+                .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
     }
 }

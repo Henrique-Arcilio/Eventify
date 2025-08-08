@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserTicket {
     @Id
     private String id;
+    private String userId;
     private String eventId;
     private String ticketId;
     private String costumerName;

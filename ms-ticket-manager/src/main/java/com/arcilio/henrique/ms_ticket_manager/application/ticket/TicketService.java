@@ -53,8 +53,9 @@ public class TicketService {
         UserTicket ticket = new UserTicket();
 
         ticket.setCpf(user.getCpf());
+        ticket.setUserId(user.getId());
         ticket.setEventId(ticketForSale.getEvent().getId());
-        ticket.setTicketId(ticketForSale.getId());
+        ticket.setPurchasedTicketId(ticketForSale.getId());
         ticket.setCostumerName(user.getFullname());
         ticket.setCostumerMail(user.getUsername());
         ticket.setBRLTotalAmount(ticketForSale.getBRLTotalAmount());

@@ -12,7 +12,7 @@ public class UserTicket {
     private String id;
     private String userId;
     private String eventId;
-    private String ticketId;
+    private String purchasedTicketId;
     private String costumerName;
     private String cpf;
     private String costumerMail;

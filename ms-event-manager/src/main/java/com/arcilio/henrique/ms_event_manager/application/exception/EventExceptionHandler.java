@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_event_manager.application.exception;
 
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ActiveTicketException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,23 +41,23 @@ public class EventExceptionHandler {
         log.error("Api error: ", exception);
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorMessage(request,HttpStatus.BAD_REQUEST, exception.getMessage()));
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new ErrorMessage(request,HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage()));
     }
 
     @ExceptionHandler(ClientComunicationError.class)
     public ResponseEntity<ErrorMessage> clientComunicationError
-            (CepNotFoundException exception, HttpServletRequest request){
+            (ClientComunicationError exception, HttpServletRequest request){
 
         log.error("Api error: ", exception);
 
         return ResponseEntity
-                .status(HttpStatus.BAD_GATEWAY)
-                .body(new ErrorMessage(request,HttpStatus.BAD_GATEWAY, exception.getMessage()));
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new ErrorMessage(request,HttpStatus.SERVICE_UNAVAILABLE, exception.getMessage()));
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorMessage> clientComunicationError
+    public ResponseEntity<ErrorMessage> resourceNotFound
             (ResourceNotFoundException exception, HttpServletRequest request){
 
         log.error("Api error: ", exception);
@@ -65,4 +66,21 @@ public class EventExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorMessage(request,HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+
+    @ExceptionHandler(ActiveTicketException.class)
+    public ResponseEntity<ErrorMessage> activeTicket(ActiveTicketException exception,
+                                                        HttpServletRequest request){
+        log.error("Api error: ", exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(request,
+                HttpStatus.CONFLICT, exception.getMessage(), exception.getActiveTickets()));
+    }
+
+    @ExceptionHandler(CancelledEventException.class)
+    public ResponseEntity<ErrorMessage> cancelledEventException(CancelledEventException exception,
+                                                     HttpServletRequest request){
+        log.error("Api error: ", exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(request,
+                HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
 }

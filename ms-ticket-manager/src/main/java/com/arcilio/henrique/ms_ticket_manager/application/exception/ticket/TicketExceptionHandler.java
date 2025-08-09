@@ -1,6 +1,7 @@
 package com.arcilio.henrique.ms_ticket_manager.application.exception.ticket;
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ErrorMessage;
+import com.arcilio.henrique.ms_ticket_manager.application.exception.event.CancelledEventException;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,21 @@ public class TicketExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, exception.getMessage() ));
     }
 
+    @ExceptionHandler(CancelledEventException.class)
+    public ResponseEntity<ErrorMessage> cancelledEvent
+            (CancelledEventException exception, HttpServletRequest request){
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErrorMessage(request,HttpStatus.CONFLICT, exception.getMessage()));
+    }
 
     @ExceptionHandler(ClientComunicationError.class)
     public ResponseEntity<ErrorMessage> clientComunicationError
             (ClientComunicationError exception, HttpServletRequest request){
 
         return ResponseEntity
-                .status(HttpStatus.BAD_GATEWAY)
-                .body(new ErrorMessage(request,HttpStatus.BAD_GATEWAY, exception.getMessage()));
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new ErrorMessage(request,HttpStatus.SERVICE_UNAVAILABLE, exception.getMessage()));
     }
 }

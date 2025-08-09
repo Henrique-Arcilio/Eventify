@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_event_manager.application.exception;
 
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ActiveTicketException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,4 +66,14 @@ public class EventExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorMessage(request,HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+
+    @ExceptionHandler(ActiveTicketException.class)
+    public ResponseEntity<ErrorMessage> activeTicket(ActiveTicketException exception,
+                                                        HttpServletRequest request){
+        log.error("Api error: ", exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(request,
+                HttpStatus.CONFLICT, exception.getMessage(), exception.getActiveTickets()));
+    }
+
+
 }

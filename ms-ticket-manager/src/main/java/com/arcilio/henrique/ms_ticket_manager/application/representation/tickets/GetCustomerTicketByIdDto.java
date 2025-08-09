@@ -6,7 +6,7 @@ import lombok.Data;
 public class GetCustomerTicketByIdDto {
     private String eventId;
     private String purchasedTicketId;
-    private String costumerName;
+    private String customerName;
     private String cpf;
     private String customerMail;
     private Double BRLTotalAmount;

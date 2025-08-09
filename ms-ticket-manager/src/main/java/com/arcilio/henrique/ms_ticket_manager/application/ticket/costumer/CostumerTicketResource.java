@@ -21,27 +21,27 @@ public class CostumerTicketResource {
     public final TicketService ticketService;
 
     @GetMapping("/events/{eventId}")
-    public ResponseEntity<List<PurchasedTicketsByEventDto>> checkPurchasedByEventId(@PathVariable String eventId){
+    public ResponseEntity<List<PurchasedTicketsByEventDto>> getByEventId(@PathVariable String eventId){
         List<UserTicket> tickets = ticketService.findPurchasedByEvent(eventId);
         List<PurchasedTicketsByEventDto> ticketDtos = TicketMapper.listOfPurchasedDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserTicketByIdDto> getUserTicket(@PathVariable String id){
+    public ResponseEntity<GetUserTicketByIdDto> getById(@PathVariable String id){
         UserTicket ticket = ticketService.findUserTicketById(id);
         GetUserTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<UserTicket> purchaseTicket(@PathVariable String id,  @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<UserTicket> buy(@PathVariable String id,  @AuthenticationPrincipal UserDetails userDetails){
         UserTicket newTicket =  ticketService.createUserTicket(id, userDetails);
         return ResponseEntity.ok(newTicket);
     }
 
     @PatchMapping("{id}/cancel")
-    public ResponseEntity<Void> cancelUserTicket(@PathVariable String id){
+    public ResponseEntity<Void> cancel(@PathVariable String id){
         ticketService.cancelUserTicket(id);
         return ResponseEntity.noContent().build();
     }

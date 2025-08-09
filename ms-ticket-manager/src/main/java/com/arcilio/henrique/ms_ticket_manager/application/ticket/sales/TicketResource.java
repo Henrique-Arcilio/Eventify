@@ -29,7 +29,7 @@ public class TicketResource {
     }
 
     @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<TicketForSaleByEventDto>> checkForSaleByEventId(@PathVariable String eventId){
+    public ResponseEntity<List<TicketForSaleByEventDto>> getByEventId(@PathVariable String eventId){
         List<TicketForSale> tickets = ticketService.findForSaleByEvent(eventId);
         List<TicketForSaleByEventDto> ticketDtos = TicketMapper.listOfForSaleDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
@@ -37,26 +37,26 @@ public class TicketResource {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetTicketForSaleByIdDto> getForSaleTicketById(@PathVariable String id){
+    public ResponseEntity<GetTicketForSaleByIdDto> getById(@PathVariable String id){
         TicketForSale ticket = ticketService.findForSaleById(id);
         GetTicketForSaleByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketForSale>> getAllForSale(){
+    public ResponseEntity<List<TicketForSale>> getAll(){
         List<TicketForSale> tickets = ticketService.findAllForSale();
         return ResponseEntity.ok(tickets);
     }
 
-    @PatchMapping("{/id}")
-    public ResponseEntity<Void> updateTicket(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto){
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto){
         ticketService.updateTicketForSale(id, updateDto);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("{id}/cancel")
-    public ResponseEntity<Void> cancelTicketSale(@PathVariable String id){
+    public ResponseEntity<Void> cancel(@PathVariable String id){
         ticketService.cancelTicektSale(id);
         return ResponseEntity.noContent().build();
     }

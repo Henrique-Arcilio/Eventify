@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "${feign.data-resource.name}",  url = "${feign.data-resource.url}")
+@FeignClient(name = "${feign.event-manager.name}",  url = "${feign.event-manager.url}")
 public interface EventManagerClient {
     @GetMapping("/get-event/{id}")
     EventDto getById(@PathVariable String id);

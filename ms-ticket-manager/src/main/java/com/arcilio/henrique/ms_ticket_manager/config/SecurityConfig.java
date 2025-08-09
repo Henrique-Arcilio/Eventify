@@ -48,6 +48,8 @@ public class SecurityConfig {
                         auth.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api/v1/tickets/create-ticket").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH,"/api/v1/tickets/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/tickets/events/**").permitAll()
+                                .requestMatchers("/api/v1/customer-tickets/events/**").permitAll()
                                 .requestMatchers("/api/v1/**").authenticated())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();

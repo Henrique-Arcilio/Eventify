@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "${feign.ticket-manager.name}", url= "${feign.ticket-manager.url")
+@FeignClient(name = "${feign.ticket-manager.name}", url= "${feign.ticket-manager.url}")
 public interface TicketManagerClient {
     @GetMapping("/tickets/events/{eventId}")
     List<CheckTicketDto> checkTicketsByEventId(@PathVariable String eventId);

@@ -27,7 +27,7 @@ public class TicketResource {
         return ResponseEntity.ok(ticket);
     }
 
-    @GetMapping("/event/{eventId}")
+    @GetMapping("/events/{eventId}")
     public ResponseEntity<List<GetTicketByEventDto>> getByEventId(@PathVariable String eventId){
         List<Ticket> tickets = ticketService.findByEventId(eventId);
         List<GetTicketByEventDto> ticketDtos = TicketMapper.listOfForSaleDto(tickets);

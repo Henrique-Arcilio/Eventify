@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface UserTicketRepository extends MongoRepository<CustomerTicket, String> {
+public interface CustomerTicketRepository extends MongoRepository<CustomerTicket, String> {
     List<CustomerTicket> findByEventIdAndStatus(String eventId, TicketStatus ticketStatus);
 }

@@ -3,7 +3,6 @@ package com.arcilio.henrique.ms_ticket_manager.application.ticket.costumer;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketsByEventDto;
-import com.arcilio.henrique.ms_ticket_manager.application.ticket.TicketService;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.CustomerTicket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +17,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CostumerTicketResource {
 
-    public final TicketService ticketService;
+    public final CustomerTicketSerivce ticketService;
 
     @GetMapping("/events/{eventId}")
     public ResponseEntity<List<GetCustomerTicketsByEventDto>> getByEventId(@PathVariable String eventId){
-        List<CustomerTicket> tickets = ticketService.findPurchasedByEvent(eventId);
+        List<CustomerTicket> tickets = ticketService.findByEventId(eventId);
         List<GetCustomerTicketsByEventDto> ticketDtos = TicketMapper.listOfPurchasedDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GetCustomerTicketByIdDto> getById(@PathVariable String id){
-        CustomerTicket ticket = ticketService.findUserTicketById(id);
+        CustomerTicket ticket = ticketService.findById(id);
         GetCustomerTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<CustomerTicket> buy(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails){
-        CustomerTicket newTicket =  ticketService.createUserTicket(id, userDetails);
+        CustomerTicket newTicket =  ticketService.create(id, userDetails);
         return ResponseEntity.ok(newTicket);
     }
 

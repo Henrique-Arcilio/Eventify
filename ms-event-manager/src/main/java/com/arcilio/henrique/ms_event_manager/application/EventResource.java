@@ -58,4 +58,10 @@ public class EventResource {
         eventService.update(id,updateDto);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("{id}/cancel")
+    public ResponseEntity<Void> cancel(@PathVariable String id){
+        eventService.cancel(id);
+        return ResponseEntity.noContent().build();
+    }
 }

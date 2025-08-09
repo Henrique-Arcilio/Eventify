@@ -47,7 +47,7 @@ public class EventExceptionHandler {
 
     @ExceptionHandler(ClientComunicationError.class)
     public ResponseEntity<ErrorMessage> clientComunicationError
-            (CepNotFoundException exception, HttpServletRequest request){
+            (ClientComunicationError exception, HttpServletRequest request){
 
         log.error("Api error: ", exception);
 

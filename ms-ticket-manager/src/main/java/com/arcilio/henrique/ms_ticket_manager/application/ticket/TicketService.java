@@ -110,4 +110,10 @@ public class TicketService {
         ticket.setStatus(TicketStatus.CANCELLED);
         ticketForSaleRepository.save(ticket);
     }
+    public void cancelUserTicket(String id) {
+        Optional<UserTicket> ticketOp = userTicketRepository.findById(id);
+        UserTicket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));
+        ticket.setStatus(TicketStatus.CANCELLED);
+        userTicketRepository.save(ticket);
+    }
 }

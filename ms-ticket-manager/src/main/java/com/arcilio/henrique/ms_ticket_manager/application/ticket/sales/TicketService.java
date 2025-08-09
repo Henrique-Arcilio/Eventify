@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket.sales;
 
+import com.arcilio.henrique.ms_ticket_manager.application.exception.event.CancelledEventException;
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
@@ -35,8 +36,11 @@ public class TicketService {
         }catch (FeignException e){
             if(e.status() == 404) {
                 throw new ResourceNotFoundException("There is no event with such id");
+            }else if(e.status() == 409){
+                throw new CancelledEventException("The event with the provided id has been cancelled");
+            }else{
+                throw new ClientComunicationError("Unable to comunicate with ms-event-client. Try again later");
             }
-            throw new ClientComunicationError("Unable to communicate with ViaCep client. Try again later");
         }
     }
 

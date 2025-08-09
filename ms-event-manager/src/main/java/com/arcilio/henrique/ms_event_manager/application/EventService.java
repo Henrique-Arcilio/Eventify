@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_event_manager.application;
 
+import com.arcilio.henrique.ms_event_manager.application.exception.CancelledEventException;
 import com.arcilio.henrique.ms_event_manager.application.exception.ResourceNotFoundException;
 import com.arcilio.henrique.ms_event_manager.application.representation.CheckTicketDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
@@ -32,16 +33,21 @@ public class EventService {
 
     public Event createEvent(Event event){
         try {
+            event.setStatus(EventStatus.ACTIVE);
             return eventRepository.save(  insertViaCepValues(event));
 
-        }catch (FeignException.FeignClientException e){
+        }catch (FeignException e){
             throw new ClientComunicationError("Unable to communicate with ViaCep client. Try again later");
         }
     }
 
     public Event findById(String id){
-        Optional<Event> event = eventRepository.findById(id);
-        return event.orElseThrow(() -> new ResourceNotFoundException("No event found with such id"));
+        Optional<Event> eventOp = eventRepository.findById(id);
+        Event event = eventOp.orElseThrow(() -> new ResourceNotFoundException("No event found with such id"));
+        if(event.getStatus() == EventStatus.CANCELLED){
+            throw new CancelledEventException("The event with the provided id has been cancelled");
+        }
+        return event;
     }
 
     public Page<Event> findAll(Pageable pageable){

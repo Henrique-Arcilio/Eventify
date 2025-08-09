@@ -5,6 +5,7 @@ import com.arcilio.henrique.ms_ticket_manager.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api/v1/tickets/create-ticket").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH,"/api/v1/tickets/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/**").authenticated())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();

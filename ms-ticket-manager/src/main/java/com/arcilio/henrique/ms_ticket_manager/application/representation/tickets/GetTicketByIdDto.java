@@ -4,8 +4,8 @@ import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDt
 import lombok.Data;
 
 @Data
-public class GetTicketForSaleByIdDto {
+public class GetTicketByIdDto {
     private EventDto event;
-    private Double BRLTotalAmount;
-    private Double USDTotalAmount;
+    private Double brlTotalAmount;
+    private Double usdTotalAmount;
 }

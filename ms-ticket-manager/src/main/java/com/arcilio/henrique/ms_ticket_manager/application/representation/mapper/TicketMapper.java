@@ -16,14 +16,16 @@ public class TicketMapper {
 
     private static final ModelMapper mapper = new ModelMapper();
 
-    public static List<TicketForSaleByEventDto> listOfForSaleDto(List<TicketForSale> tickets) {
-        List<TicketForSaleByEventDto> ticketDtos = new ArrayList<>();
+    static {
         mapper.addMappings(new PropertyMap<TicketForSale, TicketForSaleByEventDto>() {
             @Override
             protected void configure() {
                 map().setEventName(source.getEvent().getEventName());
             }
         });
+    }
+    public static List<TicketForSaleByEventDto> listOfForSaleDto(List<TicketForSale> tickets) {
+        List<TicketForSaleByEventDto> ticketDtos = new ArrayList<>();
         for (TicketForSale ticket : tickets){
             ticketDtos.add(mapper.map(ticket, TicketForSaleByEventDto.class));
         }

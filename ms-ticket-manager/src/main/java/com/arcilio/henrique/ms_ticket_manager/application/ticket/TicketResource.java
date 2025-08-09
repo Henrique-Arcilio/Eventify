@@ -68,4 +68,16 @@ public class TicketResource {
         ticketService.updateTicketForSale(id, updateDto);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("{id}/cancel")
+    public ResponseEntity<Void> cancelTicketSale(@PathVariable String id){
+        ticketService.cancelTicektSale(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/purchased/cancel")
+    public ResponseEntity<Void> cancelUserTicket(@PathVariable String id){
+        ticketService.cancelUserTicket(id);
+        return ResponseEntity.noContent().build();
+    }
 }

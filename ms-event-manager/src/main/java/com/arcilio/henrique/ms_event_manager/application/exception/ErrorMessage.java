@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -23,6 +24,8 @@ public class ErrorMessage {
     private String statusText;
     private String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> activeTickets;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> errors;
 
     public ErrorMessage(HttpServletRequest request, HttpStatus status, String message) {
@@ -32,7 +35,14 @@ public class ErrorMessage {
         this.statusText = status.getReasonPhrase();
         this.message = message;
     }
-
+    public ErrorMessage(HttpServletRequest request, HttpStatus status, String message, List<String> activeTickets) {
+        this.path = request.getRequestURI();
+        this.method = request.getMethod();
+        this.status = status.value();
+        this.statusText = status.getReasonPhrase();
+        this.message = message;
+        this.activeTickets = activeTickets;
+    }
     public ErrorMessage(HttpServletRequest request, HttpStatus status, String message, BindingResult result) {
         this.path = request.getRequestURI();
         this.method = request.getMethod();

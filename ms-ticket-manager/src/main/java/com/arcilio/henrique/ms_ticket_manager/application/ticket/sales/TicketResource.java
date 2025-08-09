@@ -49,12 +49,14 @@ public class TicketResource {
         return ResponseEntity.ok(tickets);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto){
         ticketService.updateTicketForSale(id, updateDto);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("{id}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable String id){
         ticketService.cancelTicektSale(id);

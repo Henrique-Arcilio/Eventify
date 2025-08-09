@@ -2,11 +2,11 @@ package com.arcilio.henrique.ms_ticket_manager.application.ticket.sales;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketForSaleByIdDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.TicketForSaleByEventDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketByIdDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketByEventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.UpdateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.ticket.TicketService;
-import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,29 +23,29 @@ public class TicketResource {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<TicketForSale> create(@Valid @RequestBody CreateTicketDto dto){
-        TicketForSale ticket = ticketService.createTicketForSale(dto);
+    public ResponseEntity<Ticket> create(@Valid @RequestBody CreateTicketDto dto){
+        Ticket ticket = ticketService.createTicketForSale(dto);
         return ResponseEntity.ok(ticket);
     }
 
     @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<TicketForSaleByEventDto>> getByEventId(@PathVariable String eventId){
-        List<TicketForSale> tickets = ticketService.findForSaleByEvent(eventId);
-        List<TicketForSaleByEventDto> ticketDtos = TicketMapper.listOfForSaleDto(tickets);
+    public ResponseEntity<List<GetTicketByEventDto>> getByEventId(@PathVariable String eventId){
+        List<Ticket> tickets = ticketService.findForSaleByEvent(eventId);
+        List<GetTicketByEventDto> ticketDtos = TicketMapper.listOfForSaleDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetTicketForSaleByIdDto> getById(@PathVariable String id){
-        TicketForSale ticket = ticketService.findForSaleById(id);
-        GetTicketForSaleByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
+    public ResponseEntity<GetTicketByIdDto> getById(@PathVariable String id){
+        Ticket ticket = ticketService.findForSaleById(id);
+        GetTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketForSale>> getAll(){
-        List<TicketForSale> tickets = ticketService.findAllForSale();
+    public ResponseEntity<List<Ticket>> getAll(){
+        List<Ticket> tickets = ticketService.findAllForSale();
         return ResponseEntity.ok(tickets);
     }
 

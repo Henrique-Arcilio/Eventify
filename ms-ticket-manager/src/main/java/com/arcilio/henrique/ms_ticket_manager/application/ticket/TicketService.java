@@ -4,10 +4,10 @@ import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.Resou
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.EventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.UpdateTicketDto;
-import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketForSale;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketStatus;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.User;
-import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.CustomerTicket;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationError;
 import com.arcilio.henrique.ms_ticket_manager.infra.client.EventManagerClient;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.TicketForSaleRepository;
@@ -29,15 +29,15 @@ public class TicketService {
     private final EventManagerClient eventManagerClient;
     private final UserRepository userRepository;
 
-    public TicketForSale createTicketForSale(CreateTicketDto dto) {
+    public Ticket createTicketForSale(CreateTicketDto dto) {
         try {
-            TicketForSale ticketForSale = new TicketForSale();
-            ticketForSale.setBRLTotalAmount(dto.getBrlTotalAmount());
-            ticketForSale.setUSDTotalAmount(dto.getBrlTotalAmount() * 5);
+            Ticket ticket = new Ticket();
+            ticket.setBrlTotalAmount(dto.getBrlTotalAmount());
+            ticket.setUsdTotalAmount(dto.getBrlTotalAmount() * 5);
             EventDto eventDto = eventManagerClient.getById(dto.getEventId());
-            ticketForSale.setEvent(eventDto);
-            ticketForSale.setStatus(TicketStatus.ACTIVE);
-            return ticketForSaleRepository.save(ticketForSale);
+            ticket.setEvent(eventDto);
+            ticket.setStatus(TicketStatus.ACTIVE);
+            return ticketForSaleRepository.save(ticket);
         }catch (FeignException e){
             if(e.status() == 404) {
                 throw new ResourceNotFoundException("There is no event with such id");
@@ -46,73 +46,73 @@ public class TicketService {
         }
     }
 
-    public UserTicket createUserTicket(String ticketId, UserDetails userDetails) {
-        Optional<TicketForSale> ticketForSaleOp = ticketForSaleRepository.findById(ticketId);
-        TicketForSale ticketForSale = ticketForSaleOp
+    public CustomerTicket createUserTicket(String ticketId, UserDetails userDetails) {
+        Optional<Ticket> ticketForSaleOp = ticketForSaleRepository.findById(ticketId);
+        Ticket ticketForSale = ticketForSaleOp
                 .orElseThrow(
                 () -> new ResourceNotFoundException("There is not ticket for sale with the given id"));
 
         User user = userRepository.findByUsername(userDetails.getUsername());
-        UserTicket ticket = new UserTicket();
+        CustomerTicket ticket = new CustomerTicket();
 
         ticket.setCpf(user.getCpf());
         ticket.setUserId(user.getId());
         ticket.setEventId(ticketForSale.getEvent().getId());
         ticket.setPurchasedTicketId(ticketForSale.getId());
-        ticket.setCostumerName(user.getFullname());
-        ticket.setCostumerMail(user.getUsername());
-        ticket.setBRLTotalAmount(ticketForSale.getBRLTotalAmount());
-        ticket.setUSDTotalAmount(ticketForSale.getUSDTotalAmount());
+        ticket.setCustomerName(user.getFullname());
+        ticket.setCustomerMail(user.getUsername());
+        ticket.setBrlTotalAmount(ticketForSale.getBrlTotalAmount());
+        ticket.setUsdTotalAmount(ticketForSale.getUsdTotalAmount());
         ticket.setStatus(TicketStatus.ACTIVE);
 
         return userTicketRepository.save(ticket);
     }
 
-    public List<TicketForSale> findForSaleByEvent(String eventId) {
+    public List<Ticket> findForSaleByEvent(String eventId) {
         return ticketForSaleRepository.findByEventIdAndStatus(eventId, TicketStatus.ACTIVE);
     }
 
-    public List<UserTicket> findPurchasedByEvent(String eventId) {
+    public List<CustomerTicket> findPurchasedByEvent(String eventId) {
         return userTicketRepository.findByEventIdAndStatus(eventId, TicketStatus.ACTIVE);
     }
 
-    public TicketForSale findForSaleById(String id) throws ResourceNotFoundException{
+    public Ticket findForSaleById(String id) throws ResourceNotFoundException{
         return ticketForSaleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
     }
 
-    public UserTicket findUserTicketById(String id) throws ResourceNotFoundException{
+    public CustomerTicket findUserTicketById(String id) throws ResourceNotFoundException{
         return userTicketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
     }
 
-    public List<TicketForSale> findAllForSale() {
+    public List<Ticket> findAllForSale() {
         return ticketForSaleRepository.findAll();
     }
 
     public void updateTicketForSale(String id, UpdateTicketDto updateDto) {
-        Optional<TicketForSale> ticketOp = ticketForSaleRepository.findById(id);
-        TicketForSale ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No ticket found with given id"));
+        Optional<Ticket> ticketOp = ticketForSaleRepository.findById(id);
+        Ticket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No ticket found with given id"));
         ticketForSaleRepository.save( updateValues(ticket, updateDto));
     }
 
-    TicketForSale updateValues(TicketForSale ticketForSale, UpdateTicketDto updateDto){
+    Ticket updateValues(Ticket ticket, UpdateTicketDto updateDto){
         if(updateDto.getBrlTotalAmount() != null){
-            ticketForSale.setBRLTotalAmount(updateDto.getBrlTotalAmount());
-            ticketForSale.setUSDTotalAmount(ticketForSale.getBRLTotalAmount() * 5);
+            ticket.setBrlTotalAmount(updateDto.getBrlTotalAmount());
+            ticket.setUsdTotalAmount(ticket.getBrlTotalAmount() * 5);
         }
-        return ticketForSale;
+        return ticket;
     }
 
     public void cancelTicektSale(String id) {
-        Optional<TicketForSale> ticketOp = ticketForSaleRepository.findById(id);
-        TicketForSale ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));
+        Optional<Ticket> ticketOp = ticketForSaleRepository.findById(id);
+        Ticket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));
         ticket.setStatus(TicketStatus.CANCELLED);
         ticketForSaleRepository.save(ticket);
     }
     public void cancelUserTicket(String id) {
-        Optional<UserTicket> ticketOp = userTicketRepository.findById(id);
-        UserTicket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));
+        Optional<CustomerTicket> ticketOp = userTicketRepository.findById(id);
+        CustomerTicket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));
         ticket.setStatus(TicketStatus.CANCELLED);
         userTicketRepository.save(ticket);
     }

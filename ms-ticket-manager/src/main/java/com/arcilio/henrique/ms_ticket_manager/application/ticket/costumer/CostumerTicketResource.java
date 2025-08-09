@@ -1,10 +1,10 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket.costumer;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetUserTicketByIdDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.PurchasedTicketsByEventDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketByIdDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketsByEventDto;
 import com.arcilio.henrique.ms_ticket_manager.application.ticket.TicketService;
-import com.arcilio.henrique.ms_ticket_manager.domain.model.UserTicket;
+import com.arcilio.henrique.ms_ticket_manager.domain.model.CustomerTicket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,22 +21,22 @@ public class CostumerTicketResource {
     public final TicketService ticketService;
 
     @GetMapping("/events/{eventId}")
-    public ResponseEntity<List<PurchasedTicketsByEventDto>> getByEventId(@PathVariable String eventId){
-        List<UserTicket> tickets = ticketService.findPurchasedByEvent(eventId);
-        List<PurchasedTicketsByEventDto> ticketDtos = TicketMapper.listOfPurchasedDto(tickets);
+    public ResponseEntity<List<GetCustomerTicketsByEventDto>> getByEventId(@PathVariable String eventId){
+        List<CustomerTicket> tickets = ticketService.findPurchasedByEvent(eventId);
+        List<GetCustomerTicketsByEventDto> ticketDtos = TicketMapper.listOfPurchasedDto(tickets);
         return ResponseEntity.ok().body(ticketDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserTicketByIdDto> getById(@PathVariable String id){
-        UserTicket ticket = ticketService.findUserTicketById(id);
-        GetUserTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
+    public ResponseEntity<GetCustomerTicketByIdDto> getById(@PathVariable String id){
+        CustomerTicket ticket = ticketService.findUserTicketById(id);
+        GetCustomerTicketByIdDto ticketDto = TicketMapper.ticketForSaleDto(ticket);
         return ResponseEntity.ok(ticketDto);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<UserTicket> buy(@PathVariable String id,  @AuthenticationPrincipal UserDetails userDetails){
-        UserTicket newTicket =  ticketService.createUserTicket(id, userDetails);
+    public ResponseEntity<CustomerTicket> buy(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails){
+        CustomerTicket newTicket =  ticketService.createUserTicket(id, userDetails);
         return ResponseEntity.ok(newTicket);
     }
 

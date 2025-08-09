@@ -21,6 +21,7 @@ public class Event {
     private String bairro;
     private String cidade;
     private String uf;
+    private EventStatus status;
 
     public Event(String eventName, LocalDateTime dateTime, String cep) {
         this.eventName = eventName;

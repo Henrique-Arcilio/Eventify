@@ -62,4 +62,9 @@ public class TicketResource {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("{eventId}/sync")
+    public ResponseEntity<Void> syncEventUpdates(@PathVariable String eventId){
+        ticketService.syncEventUpdates(eventId);
+        return ResponseEntity.noContent().build();
+    }
 }

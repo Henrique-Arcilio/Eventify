@@ -103,7 +103,39 @@ public interface EventResourceDocs {
             })
     ResponseEntity<PageableDto> getAllSorted(Pageable pageable);
 
-    ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateEventDto updateDto);
+    @Operation(summary = "Update event name, CEP or date",
+            description = "It's possible to choose which attribute change. " +
+                    "The update also update the event tickets information " +
+                    "(CEP updates address info automatically based on VIACEP API).",
+            tags = {"Event"},
+            responses = {
+                    @ApiResponse(
+                            description = "Successfully Updated",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Unprocessable entity while trying to update data",
+                            responseCode = "422",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Service Unavailable: Failed to comunicate with ticket manager",
+                            responseCode = "503",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<Void> update(@PathVariable
+                                @Parameter(description = "The id of the event to update ") String id,
+                                @Valid @RequestBody UpdateEventDto updateDto);
+
 
     ResponseEntity<Void> cancel(@PathVariable String id);
 }

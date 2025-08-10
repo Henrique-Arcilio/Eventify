@@ -1,7 +1,7 @@
 package com.arcilio.henrique.ms_event_manager.application;
 
 import com.arcilio.henrique.ms_event_manager.application.representation.CreateEventDto;
-import com.arcilio.henrique.ms_event_manager.application.representation.PagableDto;
+import com.arcilio.henrique.ms_event_manager.application.representation.PageableDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.mapper.PageableMapper;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
@@ -37,14 +37,14 @@ public class EventResource {
     }
 
     @GetMapping
-    public ResponseEntity<PagableDto> getAll(Pageable pageable){
+    public ResponseEntity<PageableDto> getAll(Pageable pageable){
         log.info("EventResource getAll method accessed");
         Page<Event> events = eventService.findAll(pageable);
         return ResponseEntity.ok().body(PageableMapper.toDto(events));
     }
 
     @GetMapping("/sorted")
-    public ResponseEntity<PagableDto> getAllSorted(Pageable pageable){
+    public ResponseEntity<PageableDto> getAllSorted(Pageable pageable){
         log.info("EventResource getAllSorted method accessed");
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();

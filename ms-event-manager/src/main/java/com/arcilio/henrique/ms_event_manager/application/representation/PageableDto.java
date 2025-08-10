@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class PagableDto {
+public class PageableDto {
     private List content;
     private boolean last;
     private boolean first;

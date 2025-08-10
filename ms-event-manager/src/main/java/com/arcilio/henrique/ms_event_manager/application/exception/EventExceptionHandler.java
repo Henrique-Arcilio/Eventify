@@ -29,8 +29,8 @@ public class EventExceptionHandler {
 
         log.error("Api error: ");
 
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorMessage(request,
-                HttpStatus.UNPROCESSABLE_ENTITY, "Invalid date format. Please use: yyyy-MM-dd'T'HH:mm:ss"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(request,
+                HttpStatus.BAD_REQUEST, "Invalid date format. Please use: yyyy-MM-dd'T'HH:mm:ss"));
     }
 
     @ExceptionHandler(CepNotFoundException.class)

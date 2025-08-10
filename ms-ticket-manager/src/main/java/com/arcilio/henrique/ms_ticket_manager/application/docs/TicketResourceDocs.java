@@ -5,6 +5,8 @@ import com.arcilio.henrique.ms_ticket_manager.application.exception.ErrorMessage
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.*;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +25,7 @@ public interface TicketResourceDocs {
 
     @Operation(summary = "Create a new Ticket for Sale",
             description = "Create a ticket for an event and put it for sale." +
-                    "The usd value is calculated based in an fictional fix value: brlTotalAmount * 5",
+                    "The usd value is calculated based in a fictional fix value: brlTotalAmount * 5",
             tags = {"Ticket, sales"},
             responses = {
                     @ApiResponse(
@@ -54,11 +56,61 @@ public interface TicketResourceDocs {
             })
     ResponseEntity<Ticket> create(@Valid @RequestBody CreateTicketDto dto);
 
-    ResponseEntity<List<GetTicketByEventDto>> getByEventId(@PathVariable String eventId);
+    @Operation(summary = "Get all Tickets for sale related to an Event",
+            description = "Only return tickets for sale with ACTIVE status",
+            tags = {"Ticket, sales"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = mediaTypeJson,
+                                    array = @ArraySchema( schema = @Schema(implementation = GetTicketByEventDto.class)))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<List<GetTicketByEventDto>> getByEventId(@PathVariable
+                                                           @Parameter(description = "Id of the event to filter by") String eventId);
 
-    ResponseEntity<GetTicketByIdDto> getById(@PathVariable String id);
+    @Operation(summary = "Find an ticket for sale using the given id",
+            tags = {"Ticket, sales"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = GetTicketByIdDto.class))),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<GetTicketByIdDto> getById(@PathVariable @Parameter(description = "Id of the ticket for sale") String id);
 
-    public ResponseEntity<PageableDto> getAll(Pageable pageable);
+    @Operation(summary = "Get all Tickets for sale",
+            description = "Get all tickets for sale (including the cancelled ones)",
+            tags = {"Ticket, sales"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = mediaTypeJson,
+                                    array = @ArraySchema( schema = @Schema(implementation = PageableDto.class)))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<PageableDto> getAll(Pageable pageable);
 
     ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto);
 

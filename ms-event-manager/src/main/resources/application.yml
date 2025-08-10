@@ -4,6 +4,11 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://${USERNAME}:${DB_PASSWORD}@clusterdesafio3.mpnjzen.mongodb.net/db-event?retryWrites=true&w=majority&appName=ClusterDesafio3
+
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
 feign:
   data-resource:
     name: via-cep
@@ -11,6 +16,7 @@ feign:
   ticket-manager:
     name: ms-ticket-manager
     url: http://localhost:8080/api/v1
+
 
 server:
   port: 8081

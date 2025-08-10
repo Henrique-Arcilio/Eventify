@@ -60,9 +60,13 @@ public class EventService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("There is no event with such id"));
         insertUpdateValues(updateDto, event);
+        syncEventUpdate(id);
         eventRepository.save(event);
     }
 
+    public void syncEventUpdate(String eventId){
+        ticketManagerClient.syncEventUpdates(eventId);
+    }
 
     private Event insertUpdateValues(UpdateEventDto updateDto, Event event){
 

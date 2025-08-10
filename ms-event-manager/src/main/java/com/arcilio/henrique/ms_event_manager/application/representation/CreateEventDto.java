@@ -18,7 +18,7 @@ public class CreateEventDto {
     private LocalDateTime dateTime;
 
     @Pattern(regexp = "\\d{5}-?\\d{3}",
-            message = "Cep code must be in format {xxxxx-xxx} or {xxxxxxxx} (with exactly 8 numeric digits)")
+            message = "CEP must contain 8 numeric digits, in the format 'xxxxx-xxx' or 'xxxxxxxx'.")
     private String cep;
 
     public Event fromDto(){

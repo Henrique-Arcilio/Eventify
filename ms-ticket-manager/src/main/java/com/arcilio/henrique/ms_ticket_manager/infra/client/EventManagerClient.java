@@ -9,9 +9,9 @@ import java.util.List;
 
 @FeignClient(name = "${feign.event-manager.name}",  url = "${feign.event-manager.url}")
 public interface EventManagerClient {
-    @GetMapping("/get-event/{id}")
+    @GetMapping("/{id}")
     EventDto getById(@PathVariable String id);
 
-    @GetMapping("/get-all-events")
+    @GetMapping
     List<EventDto> getAll(); 
 }

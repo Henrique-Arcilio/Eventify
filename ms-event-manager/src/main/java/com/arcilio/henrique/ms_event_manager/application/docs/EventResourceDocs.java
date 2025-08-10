@@ -7,7 +7,6 @@ import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEv
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

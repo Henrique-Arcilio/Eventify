@@ -1,13 +1,13 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket.sales;
 
+import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.PageableMapper;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.CreateTicketDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketByIdDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetTicketByEventDto;
-import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.UpdateTicketDto;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.*;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +43,9 @@ public class TicketResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<Ticket>> getAll(){
-        List<Ticket> tickets = ticketService.findAll();
-        return ResponseEntity.ok(tickets);
+    public ResponseEntity<PageableDto> getAll(Pageable pageable){
+        Page<Ticket> tickets = ticketService.findAll(pageable);
+        return ResponseEntity.ok(PageableMapper.toDto(tickets));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

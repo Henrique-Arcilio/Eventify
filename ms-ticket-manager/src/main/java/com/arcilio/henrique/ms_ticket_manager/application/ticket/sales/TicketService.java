@@ -12,6 +12,8 @@ import com.arcilio.henrique.ms_ticket_manager.infra.client.EventManagerClient;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.TicketForSaleRepository;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,8 +55,8 @@ public class TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("No ticket for sale found with the given id"));
     }
 
-    public List<Ticket> findAll() {
-        return ticketForSaleRepository.findAll();
+    public Page<Ticket> findAll(Pageable pageable) {
+        return ticketForSaleRepository.findAll(pageable);
     }
 
     public void updatePrice(String id, UpdateTicketDto updateDto) {

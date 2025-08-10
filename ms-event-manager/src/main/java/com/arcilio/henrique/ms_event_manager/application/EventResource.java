@@ -63,6 +63,7 @@ public class EventResource implements EventResourceDocs {
     @PatchMapping("/{id}")
     @Override
     public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateEventDto updateDto){
+        log.info("EventResource update method accessed");
         eventService.update(id,updateDto);
         return ResponseEntity.noContent().build();
     }
@@ -70,6 +71,7 @@ public class EventResource implements EventResourceDocs {
     @PatchMapping("/{id}/cancel")
     @Override
     public ResponseEntity<Void> cancel(@PathVariable String id){
+        log.info("EventResource cancel method accessed");
         eventService.cancel(id);
         return ResponseEntity.noContent().build();
     }

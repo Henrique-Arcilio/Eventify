@@ -71,6 +71,15 @@ public class TicketService {
         return ticket;
     }
 
+    void syncEventUpdates(String eventId){
+        List<Ticket> tickets = findByEventId(eventId);
+        EventDto eventDto = eventManagerClient.getById(eventId);
+        for(Ticket ticket : tickets){
+            ticket.setEvent(eventDto);
+        }
+        ticketForSaleRepository.saveAll(tickets);
+    }
+
     public void cancel(String id) {
         Optional<Ticket> ticketOp = ticketForSaleRepository.findById(id);
         Ticket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));

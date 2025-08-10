@@ -53,7 +53,7 @@ public class EventResource {
         return this.getAll(pageable);
     }
 
-    @PutMapping("/update-event/{id}")
+    @PatchMapping("/update-event/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateEventDto updateDto){
         eventService.update(id,updateDto);
         return ResponseEntity.noContent().build();

@@ -4,17 +4,16 @@ import com.arcilio.henrique.ms_event_manager.application.exception.CancelledEven
 import com.arcilio.henrique.ms_event_manager.application.exception.ResourceNotFoundException;
 import com.arcilio.henrique.ms_event_manager.application.representation.CheckTicketDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
-import com.arcilio.henrique.ms_event_manager.domain.model.EventStatus;
-import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ActiveTicketException;
-import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
-import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
+import com.arcilio.henrique.ms_event_manager.domain.model.EventStatus;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ActiveTicketException;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
 import com.arcilio.henrique.ms_event_manager.infra.clients.ticket.TicketManagerClient;
 import com.arcilio.henrique.ms_event_manager.infra.clients.viacep.ViaCepClient;
 import com.arcilio.henrique.ms_event_manager.infra.repository.EventRepository;
 import feign.FeignException;
-import feign.RetryableException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,14 +54,23 @@ public class EventService {
     }
 
     public void update(String id, UpdateEventDto updateDto){
-        Optional<Event> eventOp = eventRepository.findById(id);
-        Event event = eventOp
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("There is no event with such id"));
-        insertUpdateValues(updateDto, event);
-        eventRepository.save(event);
+        try{
+            Optional<Event> eventOp = eventRepository.findById(id);
+            Event event = eventOp
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("There is no event with such id"));
+
+            insertUpdateValues(updateDto, event);
+            syncEventUpdate(id);
+            eventRepository.save(event);
+        }catch (FeignException e){
+            throw new ClientComunicationError("Unable to communicate with ms-ticket-manager client. Try again later");
+        }
     }
 
+    public void syncEventUpdate(String eventId){
+        ticketManagerClient.syncEventUpdates(eventId);
+    }
 
     private Event insertUpdateValues(UpdateEventDto updateDto, Event event){
 

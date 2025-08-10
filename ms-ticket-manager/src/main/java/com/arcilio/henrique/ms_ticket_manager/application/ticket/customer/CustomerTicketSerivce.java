@@ -71,4 +71,7 @@ public class CustomerTicketSerivce {
         customerTicketRepository.save(ticket);
     }
 
+    public Page<Ticket> findAllForSale(Pageable pageable) {
+        return ticketForSaleRepository.findAllByStatus(TicketStatus.ACTIVE, pageable);
+    }
 }

@@ -2,6 +2,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.ticket.customer;
 
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
+import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketByIdDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.CustomerTicket;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketStatus;
@@ -10,6 +11,8 @@ import com.arcilio.henrique.ms_ticket_manager.infra.repository.CustomerTicketRep
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.TicketForSaleRepository;
 import com.arcilio.henrique.ms_ticket_manager.infra.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +56,11 @@ public class CustomerTicketSerivce {
 
     public List<CustomerTicket> findByEventId(String eventId) {
         return customerTicketRepository.findByEventIdAndStatus(eventId, TicketStatus.ACTIVE);
+    }
+
+    public Page<CustomerTicket> findAll(Pageable pageable, UserDetails userDetails){
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        return customerTicketRepository.findAllByUserId(pageable, user.getId());
     }
 
     public void cancelUserTicket(String id, UserDetails userDetails) {

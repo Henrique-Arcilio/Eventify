@@ -2,6 +2,8 @@ package com.arcilio.henrique.ms_ticket_manager.infra.repository;
 
 import com.arcilio.henrique.ms_ticket_manager.domain.model.TicketStatus;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.CustomerTicket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -11,4 +13,6 @@ public interface CustomerTicketRepository extends MongoRepository<CustomerTicket
     List<CustomerTicket> findByEventIdAndStatus(String eventId, TicketStatus ticketStatus);
 
     Optional<CustomerTicket> findByIdAndUserId(String id, String userId);
+
+    Page<CustomerTicket> findAllByUserId(Pageable pageable, String id);
 }

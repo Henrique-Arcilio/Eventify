@@ -111,7 +111,7 @@ public interface EventResourceDocs {
                     @ApiResponse(
                             description = "Successfully Updated",
                             responseCode = "204",
-                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                            content = @Content(mediaType = mediaTypeJson)),
                     @ApiResponse(
                             description = "Not Found",
                             responseCode = "404",
@@ -142,7 +142,7 @@ public interface EventResourceDocs {
                     @ApiResponse(
                             description = "Successfully Cancelled",
                             responseCode = "204",
-                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                            content = @Content(mediaType = mediaTypeJson)),
                     @ApiResponse(
                             description = "Not Found",
                             responseCode = "404",

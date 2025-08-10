@@ -112,6 +112,28 @@ public interface TicketResourceDocs {
             })
     ResponseEntity<PageableDto> getAll(Pageable pageable);
 
+    @Operation(summary = "Update a ticket for sale",
+            description = "Update only the ticket price",
+            tags = {"Ticket, sales"},
+            responses = {
+                    @ApiResponse(
+                            description = "Successfully updated",
+                            responseCode = "204",
+                            content = @Content(mediaType = mediaTypeJson)),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Unprocessable Entity",
+                            responseCode = "422",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
     ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto);
 
     ResponseEntity<Void> cancel(@PathVariable String id);

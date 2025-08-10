@@ -40,8 +40,8 @@ public class CustomerTicketResource {
     }
 
     @PatchMapping("{id}/cancel")
-    public ResponseEntity<Void> cancel(@PathVariable String id){
-        ticketService.cancelUserTicket(id);
+    public ResponseEntity<Void> cancel(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails){
+        ticketService.cancelUserTicket(id, userDetails);
         return ResponseEntity.noContent().build();
     }
 }

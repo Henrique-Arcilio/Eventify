@@ -26,7 +26,6 @@ public interface TicketResourceDocs {
     @Operation(summary = "Create a new Ticket for Sale",
             description = "Create a ticket for an event and put it for sale." +
                     "The usd value is calculated based in a fictional fix value: brlTotalAmount * 5",
-            tags = {"Ticket, sales"},
             responses = {
                     @ApiResponse(
                             description = "Successfully created",
@@ -58,7 +57,6 @@ public interface TicketResourceDocs {
 
     @Operation(summary = "Get all Tickets for sale related to an Event",
             description = "Only return tickets for sale with ACTIVE status",
-            tags = {"Ticket, sales"},
             responses = {
                     @ApiResponse(
                             description = "Success",
@@ -76,7 +74,6 @@ public interface TicketResourceDocs {
                                                            @Parameter(description = "Id of the event to filter by") String eventId);
 
     @Operation(summary = "Find an ticket for sale using the given id",
-            tags = {"Ticket, sales"},
             responses = {
                     @ApiResponse(
                             description = "Success",
@@ -96,7 +93,6 @@ public interface TicketResourceDocs {
 
     @Operation(summary = "Get all Tickets for sale",
             description = "Get all tickets for sale (including the cancelled ones)",
-            tags = {"Ticket, sales"},
             responses = {
                     @ApiResponse(
                             description = "Success",
@@ -114,7 +110,6 @@ public interface TicketResourceDocs {
 
     @Operation(summary = "Update a ticket for sale",
             description = "Update only the ticket price",
-            tags = {"Ticket, sales"},
             responses = {
                     @ApiResponse(
                             description = "Successfully updated",
@@ -134,7 +129,9 @@ public interface TicketResourceDocs {
                             content = @Content(mediaType = mediaTypeJson)
                     )
             })
-    ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateTicketDto updateDto);
+    ResponseEntity<Void> update(@PathVariable
+                                @Parameter(description = "Id of the ticket to update")
+                                String id, @Valid @RequestBody UpdateTicketDto updateDto);
 
     ResponseEntity<Void> cancel(@PathVariable String id);
 

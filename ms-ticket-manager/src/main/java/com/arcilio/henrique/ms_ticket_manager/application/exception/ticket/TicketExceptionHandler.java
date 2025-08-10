@@ -6,6 +6,8 @@ import com.arcilio.henrique.ms_ticket_manager.infra.client.ClientComunicationErr
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,4 +38,11 @@ public class TicketExceptionHandler {
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new ErrorMessage(request,HttpStatus.SERVICE_UNAVAILABLE, exception.getMessage()));
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> invalidArgument(MethodArgumentNotValidException exception,
+                                                        HttpServletRequest request, BindingResult result){
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorMessage(request,
+                HttpStatus.UNPROCESSABLE_ENTITY, "Invalid fields", result ));
+    }
+
 }

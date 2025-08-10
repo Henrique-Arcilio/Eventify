@@ -7,6 +7,7 @@ import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEv
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,11 +46,61 @@ public interface EventResourceDocs {
     })
     ResponseEntity<Event> create(@Valid @RequestBody CreateEventDto dto);
 
+    @Operation(summary = "Find an event by the given id",
+            tags = {"Event"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Conflict: Event has been cancelled",
+                            responseCode = "409",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<Event> getById(@PathVariable
+                                  @Parameter(description = "The event id") String id);
 
-    ResponseEntity<Event> getById(@PathVariable String id);
-
+    @Operation(summary = "Find all the events",
+            description = "Find all events (even cancelled events)",
+            tags = {"Event"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = PageableDto.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
     ResponseEntity<PageableDto> getAll(Pageable pageable);
 
+    @Operation(summary = "Find all the events sorted",
+            description = "Find all events but in alphabetical order",
+            tags = {"Event"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = PageableDto.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+
+            })
     ResponseEntity<PageableDto> getAllSorted(Pageable pageable);
 
     ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateEventDto updateDto);

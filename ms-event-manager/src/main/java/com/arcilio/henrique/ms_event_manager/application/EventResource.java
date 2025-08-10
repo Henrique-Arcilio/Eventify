@@ -23,27 +23,27 @@ public class EventResource {
 
     private final EventService eventService;
 
-    @PostMapping("/create-event")
+    @PostMapping
     public ResponseEntity<Event> create(@Valid @RequestBody CreateEventDto dto){
         log.info("EventResource create method accessed");
         Event event = eventService.createEvent(dto.fromDto());
         return ResponseEntity.ok(event);
     }
-    @GetMapping("/get-event/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Event> getById(@PathVariable String id){
         log.info("EventResource getById method accessed");
         Event event = eventService.findById(id);
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/get-all-events")
+    @GetMapping
     public ResponseEntity<PagableDto> getAll(Pageable pageable){
         log.info("EventResource getAll method accessed");
         Page<Event> events = eventService.findAll(pageable);
         return ResponseEntity.ok().body(PageableMapper.toDto(events));
     }
 
-    @GetMapping("/get-all-events/sorted")
+    @GetMapping("/sorted")
     public ResponseEntity<PagableDto> getAllSorted(Pageable pageable){
         log.info("EventResource getAllSorted method accessed");
         int pageNumber = pageable.getPageNumber();
@@ -53,13 +53,13 @@ public class EventResource {
         return this.getAll(pageable);
     }
 
-    @PatchMapping("/update-event/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody UpdateEventDto updateDto){
         eventService.update(id,updateDto);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("{id}/cancel")
+    @PatchMapping("/{id}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable String id){
         eventService.cancel(id);
         return ResponseEntity.noContent().build();

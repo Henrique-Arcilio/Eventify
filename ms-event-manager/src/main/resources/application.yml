@@ -20,3 +20,6 @@ feign:
 
 server:
   port: 8081
+
+springdoc:
+  paths-to-match: /api/v1/**

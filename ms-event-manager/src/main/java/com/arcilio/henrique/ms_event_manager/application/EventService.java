@@ -42,9 +42,9 @@ public class EventService {
 
     public Event findById(String id){
         Optional<Event> eventOp = eventRepository.findById(id);
-        Event event = eventOp.orElseThrow(() -> new ResourceNotFoundException("No event found with such id"));
+        Event event = eventOp.orElseThrow(() -> new ResourceNotFoundException("No event found with the given id"));
         if(event.getStatus() == EventStatus.CANCELLED){
-            throw new CancelledEventException("The event with the provided id has been cancelled");
+            throw new CancelledEventException("The event with the given id has been cancelled");
         }
         return event;
     }
@@ -58,7 +58,7 @@ public class EventService {
             Optional<Event> eventOp = eventRepository.findById(id);
             Event event = eventOp
                     .orElseThrow(() ->
-                            new ResourceNotFoundException("There is no event with such id"));
+                            new ResourceNotFoundException("No event found with the given id"));
 
             insertUpdateValues(updateDto, event);
             syncEventUpdate(id);
@@ -89,7 +89,7 @@ public class EventService {
     private Event insertViaCepValues(Event event) {
         ViaCepAdressDto addressInformation = viaCepClient.getAdressInformation(event.getCep());
         if(addressInformation.isErro()){
-            throw new CepNotFoundException("The CEP provided doesn't exist");
+            throw new CepNotFoundException("The provided CEP doesn't exist");
         }
         event.setBairro(addressInformation.getBairro());
         event.setCidade(addressInformation.getLocalidade());
@@ -117,11 +117,12 @@ public class EventService {
 
     private void checkTickets(List<CheckTicketDto> forSale, List<CheckTicketDto> purchased){
         if(!forSale.isEmpty()){
-            throw new ActiveTicketException("There are still tickets on sale for this event. please speak to the ticket administrator ", forSale);
+            throw new ActiveTicketException(
+                    "There are still tickets on sale for this event.", forSale);
         }
         if(!purchased.isEmpty()){
-            throw new ActiveTicketException("It is not possible to delete this event. " +
-                    "Tickets have already been sold for it.", purchased);
+            throw new ActiveTicketException(
+                    "Tickets have already been sold.", purchased);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_ticket_manager.application.ticket.costumer;
+package com.arcilio.henrique.ms_ticket_manager.application.ticket.customer;
 
 
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ticket.ResourceNotFoundException;
@@ -28,7 +28,7 @@ public class CustomerTicketSerivce {
         Optional<Ticket> ticketForSaleOp = ticketForSaleRepository.findById(ticketId);
         Ticket ticketForSale = ticketForSaleOp
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("There is not ticket for sale with the given id"));
+                        () -> new ResourceNotFoundException("No ticket for sale with the given id"));
 
         User user = userRepository.findByUsername(userDetails.getUsername());
         CustomerTicket ticket = new CustomerTicket();
@@ -55,9 +55,10 @@ public class CustomerTicketSerivce {
         return customerTicketRepository.findByEventIdAndStatus(eventId, TicketStatus.ACTIVE);
     }
 
-    public void cancelUserTicket(String id) {
-        Optional<CustomerTicket> ticketOp = customerTicketRepository.findById(id);
-        CustomerTicket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No found ticket with the given id"));
+    public void cancelUserTicket(String id, UserDetails userDetails) {
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        Optional<CustomerTicket> ticketOp = customerTicketRepository.findByIdAndUserId(id,  user.getId());
+        CustomerTicket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No ticket found with the given id in the user account"));
         ticket.setStatus(TicketStatus.CANCELLED);
         customerTicketRepository.save(ticket);
     }

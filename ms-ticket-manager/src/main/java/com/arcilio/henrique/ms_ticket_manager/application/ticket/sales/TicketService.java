@@ -35,11 +35,11 @@ public class TicketService {
             return ticketForSaleRepository.save(ticket);
         }catch (FeignException e){
             if(e.status() == 404) {
-                throw new ResourceNotFoundException("There is no event with such id");
+                throw new ResourceNotFoundException("No event found with the given id.");
             }else if(e.status() == 409){
                 throw new CancelledEventException("The event with the provided id has been cancelled");
             }else{
-                throw new ClientComunicationError("Unable to comunicate with ms-event-client. Try again later");
+                throw new ClientComunicationError("Unable to communicate with ms-event-client. Try again later");
             }
         }
     }
@@ -59,7 +59,7 @@ public class TicketService {
 
     public void updatePrice(String id, UpdateTicketDto updateDto) {
         Optional<Ticket> ticketOp = ticketForSaleRepository.findById(id);
-        Ticket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No ticket found with given id"));
+        Ticket ticket = ticketOp.orElseThrow(() -> new ResourceNotFoundException("No ticket found with the given id"));
         ticketForSaleRepository.save( updateValues(ticket, updateDto));
     }
 

@@ -13,12 +13,13 @@ public class CreateEventDto {
     @NotBlank(message = "The event must have a name")
     private String eventName;
 
+    @Future(message = "The event date must be in the future.")
     @NotNull(message = "The event must have a date")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTime;
 
     @Pattern(regexp = "\\d{5}-?\\d{3}",
-            message = "Cep code must be in format {xxxxx-xxx} or {xxxxxxxx} (with exactly 8 numeric digits)")
+            message = "CEP must contain 8 numeric digits, in the format 'xxxxx-xxx' or 'xxxxxxxx'.")
     private String cep;
 
     public Event fromDto(){

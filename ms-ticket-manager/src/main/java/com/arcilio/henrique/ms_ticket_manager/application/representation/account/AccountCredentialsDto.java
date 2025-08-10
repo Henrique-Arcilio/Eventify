@@ -14,7 +14,7 @@ public class AccountCredentialsDto implements Serializable {
     private static final long serialVersion = 1L;
 
     @NotBlank(message = "User e-mail is required")
-    @Email(message = "please insert a valid email")
+    @Email(message = "please insert a valid e-mail")
     private String username;
 
     @NotBlank(message = "User password is required")

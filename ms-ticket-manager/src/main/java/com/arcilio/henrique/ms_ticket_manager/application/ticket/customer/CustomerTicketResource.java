@@ -1,4 +1,4 @@
-package com.arcilio.henrique.ms_ticket_manager.application.ticket.costumer;
+package com.arcilio.henrique.ms_ticket_manager.application.ticket.customer;
 
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketByIdDto;
@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/customer-tickets/")
 @RequiredArgsConstructor
-public class CostumerTicketResource {
+public class CustomerTicketResource {
 
     public final CustomerTicketSerivce ticketService;
 
@@ -40,8 +40,8 @@ public class CostumerTicketResource {
     }
 
     @PatchMapping("{id}/cancel")
-    public ResponseEntity<Void> cancel(@PathVariable String id){
-        ticketService.cancelUserTicket(id);
+    public ResponseEntity<Void> cancel(@PathVariable String id, @AuthenticationPrincipal UserDetails userDetails){
+        ticketService.cancelUserTicket(id, userDetails);
         return ResponseEntity.noContent().build();
     }
 }

@@ -133,7 +133,25 @@ public interface TicketResourceDocs {
                                 @Parameter(description = "Id of the ticket to update")
                                 String id, @Valid @RequestBody UpdateTicketDto updateDto);
 
-    ResponseEntity<Void> cancel(@PathVariable String id);
+
+    @Operation(summary = "Cancel the sale of a ticket by id",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson)),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(mediaType = mediaTypeJson,
+                                    schema =  @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<Void> cancel(@PathVariable @Parameter(description = "Id of the ticket to cancel") String id);
 
     ResponseEntity<Void> syncEventUpdates(@PathVariable String eventId);
 }

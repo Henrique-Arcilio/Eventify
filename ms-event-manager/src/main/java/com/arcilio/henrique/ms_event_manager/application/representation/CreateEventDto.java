@@ -13,6 +13,7 @@ public class CreateEventDto {
     @NotBlank(message = "The event must have a name")
     private String eventName;
 
+    @Future(message = "The event date must be in the future.")
     @NotNull(message = "The event must have a date")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTime;

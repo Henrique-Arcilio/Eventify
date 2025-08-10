@@ -111,7 +111,7 @@ public interface EventResourceDocs {
             responses = {
                     @ApiResponse(
                             description = "Successfully Updated",
-                            responseCode = "200",
+                            responseCode = "204",
                             content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
                     @ApiResponse(
                             description = "Not Found",
@@ -122,7 +122,7 @@ public interface EventResourceDocs {
                             responseCode = "422",
                             content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(
-                            description = "Service Unavailable: Failed to comunicate with ticket manager",
+                            description = "Service Unavailable: Failed to communicate with ticket manager",
                             responseCode = "503",
                             content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
 
@@ -136,6 +136,32 @@ public interface EventResourceDocs {
                                 @Parameter(description = "The id of the event to update ") String id,
                                 @Valid @RequestBody UpdateEventDto updateDto);
 
-
-    ResponseEntity<Void> cancel(@PathVariable String id);
+    @Operation(summary = "Cancel an event",
+            description = "An event can be cancelled if there is no tickets related to it",
+            tags = {"Event"},
+            responses = {
+                    @ApiResponse(
+                            description = "Successfully Cancelled",
+                            responseCode = "204",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Conflict: There are active tickets related to this event id",
+                            responseCode = "409",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Service Unavailable: Failed to communicate with ticket manager",
+                            responseCode = "503",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<Void> cancel(@PathVariable
+                                @Parameter(description = "The id of the event to cancel ")String id);
 }

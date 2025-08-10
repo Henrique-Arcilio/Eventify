@@ -42,6 +42,7 @@ public class TicketResource {
         return ResponseEntity.ok(ticketDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<PageableDto> getAll(Pageable pageable){
         Page<Ticket> tickets = ticketService.findAll(pageable);

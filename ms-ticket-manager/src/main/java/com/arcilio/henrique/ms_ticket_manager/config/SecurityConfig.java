@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,"/api/v1/tickets").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/tickets/events/**").permitAll()
                                 .requestMatchers("/api/v1/customer-tickets/events/**").permitAll()
+                                .requestMatchers("/api/v1/customer-tickets/sales").permitAll()
                                 .requestMatchers("/api/v1/tickets/*/sync").permitAll()
                                 .requestMatchers(HttpMethod.PATCH,"/api/v1/tickets/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/**").authenticated())

@@ -26,7 +26,8 @@ public interface TicketResourceDocs {
 
     @Operation(summary = "Create a new Ticket for Sale",
             description = "Create a ticket for an event and put it for sale." +
-                    "The usd value is calculated based in a fictional fix value: brlTotalAmount * 5",
+                    "The usd value is calculated based in a fictional fix value: brlTotalAmount * 5 " +
+                    "(Access restricted to users with ADMIN role).",
             responses = {
                     @ApiResponse(
                             description = "Successfully created",
@@ -93,7 +94,8 @@ public interface TicketResourceDocs {
     ResponseEntity<GetTicketByIdDto> getById(@PathVariable @Parameter(description = "Id of the ticket for sale") String id);
 
     @Operation(summary = "Get all Tickets for sale",
-            description = "Get all tickets for sale (including the cancelled ones)",
+            description = "Get all tickets for sale (including the cancelled ones) - " +
+                    "Access restricted to users with ADMIN role.",
             responses = {
                     @ApiResponse(
                             description = "Success",
@@ -110,7 +112,7 @@ public interface TicketResourceDocs {
     ResponseEntity<PageableDto> getAll(Pageable pageable);
 
     @Operation(summary = "Update a ticket for sale",
-            description = "Update only the ticket price",
+            description = "Update only the ticket price. (Access restricted to users with ADMIN role).",
             responses = {
                     @ApiResponse(
                             description = "Successfully updated",
@@ -136,6 +138,7 @@ public interface TicketResourceDocs {
 
 
     @Operation(summary = "Cancel the sale of a ticket by id",
+            description = "Access restricted to users with ADMIN role.",
             responses = {
                     @ApiResponse(
                             description = "Success",

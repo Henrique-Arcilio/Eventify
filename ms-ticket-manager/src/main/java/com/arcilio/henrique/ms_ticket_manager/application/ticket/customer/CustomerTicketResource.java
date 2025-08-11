@@ -8,6 +8,7 @@ import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.PageableDto;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.CustomerTicket;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/customer-tickets")
 @RequiredArgsConstructor
+@Tag(name = "Customer Tickets", description = "Endpoints for managing Customer Tickets")
 public class CustomerTicketResource implements CustomerTicketResourceDocs {
 
     public final CustomerTicketSerivce ticketService;

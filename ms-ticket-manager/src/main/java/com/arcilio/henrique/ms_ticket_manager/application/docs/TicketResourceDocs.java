@@ -4,6 +4,7 @@ package com.arcilio.henrique.ms_ticket_manager.application.docs;
 import com.arcilio.henrique.ms_ticket_manager.application.exception.ErrorMessage;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.*;
 import com.arcilio.henrique.ms_ticket_manager.domain.model.Ticket;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -153,5 +154,6 @@ public interface TicketResourceDocs {
             })
     ResponseEntity<Void> cancel(@PathVariable @Parameter(description = "Id of the ticket to cancel") String id);
 
+    @Hidden
     ResponseEntity<Void> syncEventUpdates(@PathVariable String eventId);
 }

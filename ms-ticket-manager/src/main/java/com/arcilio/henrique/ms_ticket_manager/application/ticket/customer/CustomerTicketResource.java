@@ -1,5 +1,6 @@
 package com.arcilio.henrique.ms_ticket_manager.application.ticket.customer;
 
+import com.arcilio.henrique.ms_ticket_manager.application.docs.CustomerTicketResourceDocs;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.PageableMapper;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.mapper.TicketMapper;
 import com.arcilio.henrique.ms_ticket_manager.application.representation.tickets.GetCustomerTicketByIdDto;
@@ -21,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/customer-tickets")
 @RequiredArgsConstructor
-public class CustomerTicketResource {
+public class CustomerTicketResource implements CustomerTicketResourceDocs {
 
     public final CustomerTicketSerivce ticketService;
 

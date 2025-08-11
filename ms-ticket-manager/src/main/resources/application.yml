@@ -3,16 +3,18 @@ spring:
     name: ms-ticket-manager
   data:
     mongodb:
-      uri: mongodb+srv://${USERNAME}:${DB_PASSWORD}@clusterdesafio3.mpnjzen.mongodb.net/db-ticket?retryWrites=true&w=majority&appName=ClusterDesafio3
+      uri: ${MONGO_URL}
+
 security:
   jwt:
     token:
-      secret-key: "abcdefghijklmnopqrstuvwxyz123456"
-      expire-length: 3600000
+      secret-key: ${SECRET-KEY}
+      expire-length: ${JWT_EXPIRATION_LENGTH}
+
 feign:
   event-manager:
     name: ms-event-manager
-    url: http://localhost:8081/api/v1/events
+    url: ${EVENT_MANAGER_URL}
 
 springdoc:
   paths-to-match:

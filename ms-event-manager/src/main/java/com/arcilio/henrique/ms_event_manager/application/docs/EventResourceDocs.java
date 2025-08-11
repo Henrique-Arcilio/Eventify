@@ -7,7 +7,6 @@ import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEv
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -112,7 +111,7 @@ public interface EventResourceDocs {
                     @ApiResponse(
                             description = "Successfully Updated",
                             responseCode = "204",
-                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                            content = @Content(mediaType = mediaTypeJson)),
                     @ApiResponse(
                             description = "Not Found",
                             responseCode = "404",
@@ -143,7 +142,7 @@ public interface EventResourceDocs {
                     @ApiResponse(
                             description = "Successfully Cancelled",
                             responseCode = "204",
-                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = Event.class))),
+                            content = @Content(mediaType = mediaTypeJson)),
                     @ApiResponse(
                             description = "Not Found",
                             responseCode = "404",

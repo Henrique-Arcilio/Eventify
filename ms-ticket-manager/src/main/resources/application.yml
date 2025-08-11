@@ -15,4 +15,6 @@ feign:
     url: http://localhost:8081/api/v1/events
 
 springdoc:
-  paths-to-match: /api/v1/**
+  paths-to-match:
+    - /api/v1/**
+    - /auth/**

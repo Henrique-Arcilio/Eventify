@@ -43,8 +43,38 @@ public interface CustomerTicketResourceDocs {
     ResponseEntity<List<GetCustomerTicketsByEventDto>> getByEventId(@PathVariable
                                                                     @Parameter(description = "Id of the event to filter by") String eventId);
 
-    ResponseEntity<GetCustomerTicketByIdDto> getById(@PathVariable String id);
+    @Operation(summary = "Get a Custumer Ticket by its id",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = GetCustomerTicketByIdDto.class))),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                    content = @Content(mediaType = mediaTypeJson, schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
+    ResponseEntity<GetCustomerTicketByIdDto> getById(@PathVariable @Parameter(description = "Id of the ticket to find") String id);
 
+    @Operation(summary = "Find all Customer Tickets",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = mediaTypeJson,
+                                    array = @ArraySchema( schema = @Schema(implementation = PageableDto.class)))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
     ResponseEntity<PageableDto> findAll(Pageable pageable, @AuthenticationPrincipal UserDetails userDetails);
 
 
@@ -86,6 +116,19 @@ public interface CustomerTicketResourceDocs {
     ResponseEntity<Void> cancel(@PathVariable @Parameter(description = "Id of the customer ticekt to cancel") String id,
                                 @AuthenticationPrincipal UserDetails userDetails);
 
-
+    @Operation(summary = "Find all Tickets available for sale",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = mediaTypeJson,
+                                    array = @ArraySchema( schema = @Schema(implementation = PageableDto.class)))),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content(mediaType = mediaTypeJson)
+                    )
+            })
     ResponseEntity<PageableDto> getAllForSale(Pageable pageable);
 }

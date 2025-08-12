@@ -8,7 +8,7 @@ spring:
 security:
   jwt:
     token:
-      secret-key: ${SECRET-KEY}
+      secret-key: ${SECRET_KEY}
       expire-length: ${JWT_EXPIRATION_LENGTH}
 
 feign:

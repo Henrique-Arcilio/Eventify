@@ -54,8 +54,7 @@ The Event Manager database contains the main collection called `events`, which s
 
 - **events**: collection storing event details such as event name, date, location, and other relevant information.
 
-![MongoDB Compass - db-event events collection](./images/db-event.png)
-
+![MongoDB Compass - db-event events collection](images/db-event.PNG)
 ---
 
 ### 2. **Ticket Manager** Database
@@ -72,7 +71,7 @@ The Ticket Manager database consists of three main collections:
 
 
 
-![MongoDB Compass - db-ticket users collection](./images/db-ticket.png)
+![MongoDB Compass - db-ticket users collection](images/db-ticket.PNG)
 
 ## Creating an Admin User Manually
 

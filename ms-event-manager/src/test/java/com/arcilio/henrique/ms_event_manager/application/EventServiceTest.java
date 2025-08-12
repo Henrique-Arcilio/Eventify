@@ -2,11 +2,13 @@ package com.arcilio.henrique.ms_event_manager.application;
 
 import com.arcilio.henrique.ms_event_manager.application.exception.CancelledEventException;
 import com.arcilio.henrique.ms_event_manager.application.exception.ResourceNotFoundException;
+import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import com.arcilio.henrique.ms_event_manager.domain.model.EventStatus;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
+import com.arcilio.henrique.ms_event_manager.infra.clients.ticket.TicketManagerClient;
 import com.arcilio.henrique.ms_event_manager.infra.clients.viacep.ViaCepClient;
 import com.arcilio.henrique.ms_event_manager.infra.repository.EventRepository;
 import feign.FeignException;
@@ -16,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -39,6 +43,10 @@ class EventServiceTest {
 
     @Autowired
     private EventService eventService;
+
+    @MockitoBean
+    private TicketManagerClient ticketManagerClient;
+
 
     @BeforeEach
     void setup(){
@@ -159,12 +167,55 @@ class EventServiceTest {
         verify(eventRepository).findById("1");
     }
 
-    @Test
-    void findAll() {
-    }
+
 
     @Test
-    void update() {
+    void findAll() {
+        Pageable pageable = Pageable.ofSize(5);
+        Page<Event> page = Page.empty(pageable);
+
+        when(eventRepository.findAll(pageable)).thenReturn(page);
+
+        Page<Event> result = eventService.findAll(pageable);
+
+        assertNotNull(result);
+        verify(eventRepository).findAll(pageable);
+    }
+
+
+
+
+    @Test
+    @DisplayName("Should update event successfully")
+    void updateSuccess() {
+        String eventId = "123";
+        UpdateEventDto updateDto = new UpdateEventDto();
+        updateDto.setEventName("Updated name");
+        updateDto.setDateTime(LocalDateTime.now().plusDays(5));
+        updateDto.setCep("01001-000");
+
+        Event event = new Event("Old name", LocalDateTime.now().plusDays(1), "99999-999");
+        event.setId(eventId);
+
+        ViaCepAdressDto addressDto = new ViaCepAdressDto();
+        addressDto.setErro(false);
+        addressDto.setBairro("Sé");
+        addressDto.setLocalidade("São Paulo");
+        addressDto.setLogradouro("Praça da Sé");
+        addressDto.setUf("SP");
+
+        when(viaCepClient.getAdressInformation("01001-000")).thenReturn(addressDto);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(eventRepository.save(event)).thenReturn(event);
+
+        eventService.update(eventId, updateDto);
+
+        assertEquals("Updated name", event.getEventName());
+        assertEquals("01001-000", event.getCep());
+        assertEquals(updateDto.getDateTime(), event.getDateTime());
+
+        verify(eventRepository).findById(eventId);
+        verify(eventRepository).save(event);
     }
 
     @Test

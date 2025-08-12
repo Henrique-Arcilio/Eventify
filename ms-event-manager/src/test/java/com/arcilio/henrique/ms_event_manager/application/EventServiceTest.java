@@ -2,10 +2,12 @@ package com.arcilio.henrique.ms_event_manager.application;
 
 import com.arcilio.henrique.ms_event_manager.application.exception.CancelledEventException;
 import com.arcilio.henrique.ms_event_manager.application.exception.ResourceNotFoundException;
+import com.arcilio.henrique.ms_event_manager.application.representation.CheckTicketDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.UpdateEventDto;
 import com.arcilio.henrique.ms_event_manager.application.representation.ViaCepAdressDto;
 import com.arcilio.henrique.ms_event_manager.domain.model.Event;
 import com.arcilio.henrique.ms_event_manager.domain.model.EventStatus;
+import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ActiveTicketException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.CepNotFoundException;
 import com.arcilio.henrique.ms_event_manager.infra.clients.exception.ClientComunicationError;
 import com.arcilio.henrique.ms_event_manager.infra.clients.ticket.TicketManagerClient;
@@ -24,6 +26,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -218,11 +222,75 @@ class EventServiceTest {
         verify(eventRepository).save(event);
     }
 
+
     @Test
-    void syncEventUpdate() {
+    @DisplayName("Should throw ActiveTicketException when tickets are still for sale")
+    void cancelActiveTicketsForSale() {
+        String eventId = "123";
+        Event event = new Event("Event", LocalDateTime.now().plusDays(1), "01001-000");
+        event.setStatus(EventStatus.ACTIVE);
+        event.setId(eventId);
+
+        List<CheckTicketDto> ticketsForSale = new ArrayList<>();
+        ticketsForSale.add(new CheckTicketDto());
+        List<CheckTicketDto> ticketsPurchased = List.of();
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(ticketManagerClient.checkTicketsByEventId(eventId)).thenReturn(ticketsForSale);
+        when(ticketManagerClient.checkCustomerTicketsByEventId(eventId)).thenReturn(ticketsPurchased);
+
+        ActiveTicketException ex = assertThrows(ActiveTicketException.class, () -> {
+            eventService.cancel(eventId);
+        });
+
+        assertTrue(ex.getMessage().contains("There are still tickets on sale"));
+        verify(eventRepository).findById(eventId);
+        verify(ticketManagerClient).checkTicketsByEventId(eventId);
+        verify(ticketManagerClient).checkCustomerTicketsByEventId(eventId);
     }
 
     @Test
-    void cancel() {
+    @DisplayName("Should throw ActiveTicketException when tickets have already been sold")
+    void cancelTicketsAlreadySold() {
+        String eventId = "123";
+        Event event = new Event("Event", LocalDateTime.now().plusDays(1), "01001-000");
+        event.setStatus(EventStatus.ACTIVE);
+        event.setId(eventId);
+
+        List<CheckTicketDto> ticketsForSale = new ArrayList<>();
+        List<CheckTicketDto> ticketsPurchased = List.of(new CheckTicketDto());
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(ticketManagerClient.checkTicketsByEventId(eventId)).thenReturn(ticketsForSale);
+        when(ticketManagerClient.checkCustomerTicketsByEventId(eventId)).thenReturn(ticketsPurchased);
+
+        ActiveTicketException ex = assertThrows(ActiveTicketException.class, () -> {
+            eventService.cancel(eventId);
+        });
+
+        assertTrue(ex.getMessage().contains("Tickets have already been sold"));
+        verify(eventRepository).findById(eventId);
+        verify(ticketManagerClient).checkTicketsByEventId(eventId);
+        verify(ticketManagerClient).checkCustomerTicketsByEventId(eventId);
+    }
+
+    @Test
+    @DisplayName("Should throw ClientComunicationError when TicketManagerClient throws FeignException")
+    void cancelClientCommunicationError() {
+        String eventId = "123";
+        Event event = new Event("Event", LocalDateTime.now().plusDays(1), "01001-000");
+        event.setStatus(EventStatus.ACTIVE);
+        event.setId(eventId);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(ticketManagerClient.checkTicketsByEventId(eventId)).thenThrow(FeignException.class);
+
+        ClientComunicationError ex = assertThrows(ClientComunicationError.class, () -> {
+            eventService.cancel(eventId);
+        });
+
+        assertEquals("Unable to communicate with ms-ticket-manager client. Try again later", ex.getMessage());
+        verify(eventRepository).findById(eventId);
+        verify(ticketManagerClient).checkTicketsByEventId(eventId);
     }
 }

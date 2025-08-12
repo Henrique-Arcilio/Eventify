@@ -112,6 +112,54 @@ class EventServiceTest {
 
 
     @Test
+    @DisplayName("Should return event when found and active")
+    void findByIdSucess() {
+        Event event = new Event("Event 1", LocalDateTime.now().plusDays(1), "01001-000");
+        event.setStatus(EventStatus.ACTIVE);
+        event.setId("123");
+
+        when(eventRepository.findById("123")).thenReturn(Optional.of(event));
+
+        Event result = eventService.findById("123");
+
+        assertNotNull(result);
+        assertEquals("123", result.getId());
+        assertEquals(EventStatus.ACTIVE, result.getStatus());
+        verify(eventRepository).findById("123");
+    }
+
+    @Test
+    @DisplayName("Should throw ResourceNotFoundException when event doesn't exist by id")
+    void findByIdNotFound() {
+        when(eventRepository.findById("0")).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> {
+            eventService.findById("0");
+        });
+
+        assertEquals("No event found with the given id", ex.getMessage());
+        verify(eventRepository).findById("0");
+    }
+
+
+    @Test
+    @DisplayName("Should throw CancelledEventException when event is cancelled")
+    void findByIdCancelledEvent() {
+        Event event = new Event("Event Cancelled", LocalDateTime.now().plusDays(1), "01001-000");
+        event.setStatus(EventStatus.CANCELLED);
+        event.setId("1");
+
+        when(eventRepository.findById("1")).thenReturn(Optional.of(event));
+
+        CancelledEventException ex = assertThrows(CancelledEventException.class, () -> {
+            eventService.findById("1");
+        });
+
+        assertEquals("The event with the given id has been cancelled", ex.getMessage());
+        verify(eventRepository).findById("1");
+    }
+
+    @Test
     void findAll() {
     }
 

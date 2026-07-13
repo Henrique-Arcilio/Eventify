@@ -67,7 +67,7 @@ GET https://eventify-ms-events.onrender.com/api/v1/events
 #### Ticket Manager
 
 ```http
-POST https://eventify-ms-tickets.onrender.com/auth/login
+POST https://eventify-ms-tickets.onrender.com/auth/signin
 ```
 
 ```http

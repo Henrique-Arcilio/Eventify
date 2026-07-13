@@ -1,89 +1,175 @@
-# Challenge 03 - Compass UOL
+# Eventify - Microservices
 
 ## Overview
 
-This project was developed as part of a challenge proposed by **Compass UOL**.  
-The goal was to create two microservices — **Ticket Manager** and **Event Manager** — that communicate with each other to form a system for creating events and selling tickets. Users can manage their purchased tickets within the system.
+This project was developed as part of a challenge proposed by Compass UOL.
+
+Eventify is composed of two independent Spring Boot microservices that communicate through REST APIs using OpenFeign.
+
+- **Event Manager** – responsible for managing events.
+- **Ticket Manager** – responsible for ticket sales and purchased tickets.
+
+Each microservice has its own MongoDB database, following the Database per Service pattern.
 
 ---
+
 ## Technologies & Tools
-- **Java:** 17 (LTS)
-- **Spring Boot:** 3.5.4 (LTS)
-- **Database:** MongoDB Atlas
-  - Databases: `db-event` and `db-ticket`
-- **HTTP Client:** OpenFeign
-- **Deployment:** AWS EC2 
 
----
-### API DOCUMENTATION
-**You can acess the `ms-event-manager` swagger documentation at http://3.149.180.64:8081/swagger-ui/index.html#/**
+- Java 17
+- Spring Boot 3.5.4
+- MongoDB Atlas
+- Spring Security
+- JWT
+- OpenFeign
+- Docker
+- Swagger / OpenAPI
+- Render
 
-**You can acess the `ms-ticket-manager` swagger documentation at http://3.139.26.61:8080/swagger-ui/index.html#/**
-
-
-- Only the **Ticket Manager** microservice implements JWT authentication.
-- **Event Manager** currently allows access to all endpoints without authentication.
-----
-## Microservices Description
-
-### **Event Manager**
-- Responsible for managing events.
-- Communicates with **Ticket Manager** to ensure ticket information is updated when events change.
-- Verifies if there are tickets related before allowing an event to be canceled.
-- Consumes the **ViaCEP API** ([Webservice ViaCEP](https://viacep.com.br)) to retrieve address information based on the postal code (CEP) provided during event creation.
-
-### **Ticket Manager**
-- Manages two main entities:
-  1. **Tickets for Sale** – typically managed by users with `ROLE_ADMIN` (this role must be created directly in the database).
-  2. **Customer Tickets** – tickets purchased by customers.
-- All users created through this service are assigned the `ROLE_CUSTOMER` role, except admins added directly in the database.
-- Only `ROLE_ADMIN` can modify the "Tickets for Sale" data.
-- Implements **JWT authentication** (refresh token endpoint exists but is not functional in this version).
-- Consumes the **Event Manager** microservice to retrieve event details for ticket creation (location, date, name, and address).
-## Database Overview
-
-This project consists of two main microservices, each with its own database.
-(See above for details on the database structure to help you set up the database environment.)
-
+> Originally deployed on AWS EC2 during the Compass UOL challenge.
 
 ---
 
-### 1. **Event Manager** Database
+# Deployment
 
-The Event Manager database contains the main collection called `events`, which stores all the events created in the system.
+Both microservices are currently deployed on Render.
 
-- **events**: collection storing event details such as event name, date, location, and other relevant information.
+| Microservice | Base URL |
+|--------------|----------|
+| Event Manager | https://eventify-ms-events.onrender.com |
+| Ticket Manager | https://eventify-ms-tickets.onrender.com |
 
-![MongoDB Compass - db-event events collection](images/db-event.PNG)
+> **Note**
+>
+> These URLs are the base addresses of the REST APIs.
+> Opening them directly in a browser may display a blank page or a default Spring Boot page because no frontend is provided.
+>
+> To explore and test the APIs, use the Swagger documentation below.
+
 ---
 
-### 2. **Ticket Manager** Database
+# API Documentation
 
-The Ticket Manager database consists of three main collections:
+The APIs can be explored and tested directly through Swagger UI.
 
-- `customerTickets` (already purchased tickets): stores tickets that customers have already bought.
+| Microservice | Swagger | Authentication |
+|--------------|----------|----------------|
+| Event Manager | https://eventify-ms-events.onrender.com/swagger-ui/index.html | Not required |
+| Ticket Manager | https://eventify-ms-tickets.onrender.com/swagger-ui/index.html | JWT Authentication |
 
-- `tickets` (tickets for sale): contains tickets available for purchase linked to events.
+### Example Endpoints
 
-- `users`: stores system users. There are two user roles:
-  - **ROLE_ADMIN**: administrators who manage tickets for sale.
-  - **ROLE_CUSTOMER**: customers who purchase tickets and manage their own tickets.
+#### Event Manager
 
+```http
+GET https://eventify-ms-events.onrender.com/api/v1/events
+```
 
+#### Ticket Manager
 
-![MongoDB Compass - db-ticket users collection](images/db-ticket.PNG)
+```http
+POST https://eventify-ms-tickets.onrender.com/auth/login
+```
 
-## Creating an Admin User Manually
+```http
+GET https://eventify-ms-tickets.onrender.com/api/v1/tickets
+```
 
-To create an admin user directly in your database, **it is highly recommended to use the example below to avoid authentication issues**.
+> Protected endpoints require a valid JWT access token.
 
-The password field is encrypted using **bcrypt** with the same configuration used by this application. The raw password for the bellow example is: `admin`
+---
 
-### Example admin user insertion for MongoDB
-> **Important:**  
-> Using third-party bcrypt generators or other encryption methods **may produce hashes incompatible with the application**, causing login failures.  
-> To ensure your admin user works properly, copy and insert the JSON below into your MongoDB `db-ticket` database, `users` collection.
-```js
+# Authentication
+
+The **Ticket Manager** is responsible for authentication and authorization.
+
+- JWT Authentication
+- Access Token generation
+- Refresh Token endpoint *(currently not functional in this version)*
+
+All users created through the API receive the `ROLE_CUSTOMER` role.
+
+Administrator users (`ROLE_ADMIN`) must be created manually in the database.
+
+The **Event Manager** endpoints are currently public.
+
+Authentication for this microservice is planned for a future version alongside the frontend currently under development.
+
+---
+
+# Microservices Description
+
+## Event Manager
+
+Responsibilities:
+
+- Manage events.
+- Verify whether tickets exist before allowing an event to be cancelled.
+- Notify the Ticket Manager when event information changes.
+- Consume the ViaCEP API to automatically retrieve address information based on the provided CEP.
+
+## Ticket Manager
+
+Responsibilities:
+
+- Manage tickets available for sale.
+- Manage purchased customer tickets.
+- Authenticate users with JWT.
+- Retrieve event information from the Event Manager before creating tickets.
+
+Authorization:
+
+- `ROLE_ADMIN`
+  - Create, update and remove tickets for sale.
+
+- `ROLE_CUSTOMER`
+  - Purchase tickets.
+  - Manage their own purchased tickets.
+
+---
+
+# Database Overview
+
+Each microservice owns its own MongoDB database.
+
+## Event Manager Database
+
+Collections:
+
+- `events`
+
+Stores all event information.
+
+![MongoDB Compass - Event Database](images/db-event.PNG)
+
+---
+
+## Ticket Manager Database
+
+Collections:
+
+- `tickets`
+- `customerTickets`
+- `users`
+
+The `users` collection stores both administrators and customers.
+
+![MongoDB Compass - Ticket Database](images/db-ticket.PNG)
+
+---
+
+# Creating an Admin User Manually
+
+Administrator users must be inserted directly into the MongoDB database.
+
+The password below corresponds to:
+
+```
+admin
+```
+
+It was generated using the same BCrypt configuration used by this application.
+
+```javascript
 db.users.insertOne({
   "username": "admin@test",
   "password": "$2a$10$p2of5mko0/cqxFOt/kSh7.6wQWS8Xho13Qg7lTBymOlZ3qsimGjfK",
@@ -97,24 +183,26 @@ db.users.insertOne({
   "_class": "com.arcilio.henrique.ms_ticket_manager.domain.model.User"
 });
 ```
->**Optional:**
->If you really want to generate your own password hash, you can place the following method inside a simple Java class (for example, a utility class or a main class) just to generate the hash:
+
+If you prefer generating your own password:
 
 ```java
-public static void generatePassword() {
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    String rawPassword = "your-password";
-    String encodedPassword = encoder.encode(rawPassword);
-    System.out.println("BCrypt password hash: " + encodedPassword);
-}
+BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+String encoded = encoder.encode("your-password");
+System.out.println(encoded);
 ```
 
-## Environment Variables
-### **Event Manager**
+---
+
+# Environment Variables
+
+## Event Manager
+
 ```yaml
 spring:
   application:
     name: ms-event-manager
+
   data:
     mongodb:
       uri: ${MONGO_URL}
@@ -126,29 +214,41 @@ spring:
 
 feign:
   data-resource:
-    name: via-cep
     url: ${VIA_CEP_URL}
+
   ticket-manager:
-    name: ms-ticket-manager
     url: ${TICKET_MANAGER_URL}
-
-server:
-  port: 8081
-
-MONGO_URL – MongoDB connection string for Event Manager
-
-VIA_CEP_URL – Base URL for the ViaCEP API
-
-TICKET_MANAGER_URL – Base URL of the Ticket Manager microservice
-
-Example -> http://<TicketsHost>:8080/api/v1 (don't put 'tickets' in the end)
 ```
 
-### **Ticket Manager**
+Variables:
+
+| Variable | Description |
+|----------|-------------|
+| MONGO_URL | MongoDB connection string |
+| VIA_CEP_URL | ViaCEP base URL |
+| TICKET_MANAGER_URL | Base URL of the Ticket Manager |
+
+Example (Local):
+
+```text
+TICKET_MANAGER_URL=http://localhost:8080/api/v1
+```
+
+Example (Render):
+
+```text
+TICKET_MANAGER_URL=https://eventify-ms-tickets.onrender.com/api/v1
+```
+
+---
+
+## Ticket Manager
+
 ```yaml
 spring:
   application:
     name: ms-ticket-manager
+
   data:
     mongodb:
       uri: ${MONGO_URL}
@@ -161,23 +261,26 @@ security:
 
 feign:
   event-manager:
-    name: ms-event-manager
     url: ${EVENT_MANAGER_URL}
-
-springdoc:
-  paths-to-match:
-    - /api/v1/**
-    - /auth/**
-
-MONGO_URL – MongoDB connection string for Ticket Manager
-
-SECRET_KEY – Secret key for JWT token generation
-
-JWT_EXPIRATION_LENGTH – Token expiration time in milliseconds
-
-EVENT_MANAGER_URL – Base URL of the Event Manager microservice
-
-Example -> http://<EventsHost>:8081/api/v1/events
-
 ```
 
+Variables:
+
+| Variable | Description |
+|----------|-------------|
+| MONGO_URL | MongoDB connection string |
+| SECRET_KEY | JWT secret key |
+| JWT_EXPIRATION_LENGTH | JWT expiration time (milliseconds) |
+| EVENT_MANAGER_URL | Base URL of the Event Manager |
+
+Example (Local):
+
+```text
+EVENT_MANAGER_URL=http://localhost:8081/api/v1/events
+```
+
+Example (Render):
+
+```text
+EVENT_MANAGER_URL=https://eventify-ms-events.onrender.com/api/v1/events
+```

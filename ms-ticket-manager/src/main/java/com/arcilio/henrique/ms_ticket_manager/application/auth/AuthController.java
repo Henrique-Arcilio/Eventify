@@ -23,6 +23,8 @@ public class AuthController implements AuthResourceDocs {
 
     private final AuthService authService;
 
+
+
     @PostMapping("/signin")
     @Override
     public ResponseEntity<TokenDto> signIn(@Valid @RequestBody SignInCredentialsDto credentials){
